@@ -1,0 +1,11 @@
+{
+  "targets": {
+    "projet-integrateur-73792": {
+      "hosting": {
+        "amorce-client": [
+          "projet-integrateur-73792"
+        ]
+      }
+    }
+  }
+}
