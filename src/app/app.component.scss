@@ -27,8 +27,19 @@
     }
   }
 
-
   yaga-map {
     height: 480px;
+  }
+
+  th{
+    background-color: rgb(87, 87, 87);
+  }
+
+  td{
+    background-color: rgb(153, 153, 153);
+  }
+
+  .formulaire-Chamis-Container{
+    text-align: center
   }
 }
