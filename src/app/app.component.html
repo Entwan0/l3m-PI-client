@@ -6,19 +6,22 @@
     Projet intégrateur
   </label>
   <label class="spacer"></label>
-  <mat-icon [matMenuTriggerFor]="menuConnect">
+
+  <mat-icon *ngIf="(auth.user | async) === null" [matMenuTriggerFor]="menuConnect">
     account_circle
   </mat-icon>
-  
+  <mat-icon *ngIf="auth.user | async as user" [matMenuTriggerFor]="menuDisconnect">
+    <img [src]="user.photoURL">
+  </mat-icon>
+
   <mat-menu #menuConnect="matMenu">
-    <button mat-menu-item (click) = "login()">
+    <button mat-menu-item (click)="login()">
       &nbsp;
       <span>Compte Google</span>
     </button>
   </mat-menu>
   <mat-menu #menuDisconnect="matMenu">
     <button mat-menu-item (click)="logout()">
-      <mat-icon >logout</mat-icon>
       <span >Déconnexion</span>
     </button>
   </mat-menu>
@@ -38,17 +41,62 @@
       </mat-select>
     </mat-form-field>
 
+    <!-- Test ajouter un chamis ! -->
+    <hr />
+    <br/>
+    <div *ngIf="auth.user | async as user" >
+      <button (click)="creerNouveauChamis(user.displayName)">Ajoutez moi aux chamis !</button>
+      <b *ngFor="let post of post$ | async"> </b>
+    </div>
+    <!-- Fin test ajouter un chamis ! -->
+
+    <!-- Test du fetch des chamis ! -->
+    <br/>
+    <hr />
+    <h3> Les chamis : </h3>
+    <table border="1px solid black">
+      <tr>
+        <th>Login</th>
+        <th>age</th>
+      </tr>
+      <tr *ngFor="let chamis of chamis$ | async">
+        <td>{{chamis.login}}</td>
+        <td>{{chamis.age}}</td>
+      </tr>
+    </table>
+    <br/>
+    <hr />
+    <!-- Fin du fetch des chamis ! -->
+
+    <!-- Test fetch des defis ! -->
+    <h3> Les defis : </h3>
+    <table  border="1px solid black">
+      <tr>
+        <th> ID </th>
+        <th> Titre </th>
+        <th> Date de Creation </th>
+        <th> Auteur </th>
+      </tr>
+      <tr *ngFor="let defis of defis$ | async">
+        <td> {{defis.id}} </td>
+        <td> {{defis.titre}} </td>
+        <td> {{defis.dateDeCreation}} </td>
+        <td> {{defis.loginAuteur}} </td>
+      </tr>
+    </table>
+    <hr />
+    <!-- Fin du fetch des defis ! -->
+
     <yaga-map [lng]="5.724524" [lat]="45.188529" [zoom]="12">
-    <!--  <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer> -->
+      <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer>
       <yaga-marker  [lng] = "5.724524"
                     [lat] = "45.188529"
                     [display] = "true"
                     [opacity] = "1"
                     >
-        <!-- <yaga-icon [iconUrl]="iconMarker"></yaga-icon> -->
+        <yaga-icon [iconUrl]="iconMarker"></yaga-icon>
       </yaga-marker>
-
     </yaga-map>
-
+    
   </mat-drawer-content>
 </mat-drawer-container>

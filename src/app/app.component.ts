@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChamisService } from './chamis/chamis.service';
+import { ChangeDetectionStrategy, Component, SystemJsNgModuleLoader } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
+import { HttpClientModule } from '@angular/common/http';
 import firebase from 'firebase/app';
+import { OSM_TILE_LAYER_URL } from '@yaga/leaflet-ng2';
+import { DefisService } from './defis/defis.service';
 
 @Component({
   selector: 'app-root',
@@ -10,9 +14,21 @@ import firebase from 'firebase/app';
 })
 
 export class AppComponent {
+  iconMarker = 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Map_marker.svg/585px-Map_marker.svg.png';
+  tileLayerUrl = OSM_TILE_LAYER_URL;
   dataIconGoogle = 'assets/images/iconGoogle.png';
-  constructor(public auth: AngularFireAuth) { 
-  } 
+  chamis$:any;
+  defis$:any;
+  post$:any;
+
+  constructor(public auth: AngularFireAuth,private chamisService:ChamisService, private defisservice: DefisService) {
+    this.chamis$ = this.chamisService.fetchChamis();
+    this.defis$ = this.defisservice.fetchDefis();
+  }
+
+  creerNouveauChamis(login:any): void{
+    this.post$ = this.chamisService.postChamis(login);
+  }
 
   login(): void {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -25,4 +41,4 @@ export class AppComponent {
   logout(): void {
     this.auth.signOut();
   }
-} 
+}
