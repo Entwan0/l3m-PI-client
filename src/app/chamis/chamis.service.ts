@@ -3,8 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 export interface Chamis {
-    age: number,
-    login: string;
+    login: string,
+    nom: string,
+    prenom: string;
 }
 
 @Injectable()
@@ -13,8 +14,12 @@ export class ChamisService {
     constructor(private http:HttpClient){
     }
 
-    fetchChamis(): Observable<Object>{
+    RecupereTousLesChamis(): Observable<Object>{
         return this.http.get('http://localhost:5000/api/users/');
+    }
+
+    RecuperUnChamis(login:string): Observable<Object>{
+        return this.http.get('http://localhost:5000/api/users/'+login);
     }
 
     postChamis(loginGoogle:string,nomChoisi:string,prenomChoisi:string): Observable<Chamis>{
@@ -24,7 +29,6 @@ export class ChamisService {
             prenom: prenomChoisi
         };
 
-        console.log("login recu : " + newChamisLogin.login);
-        return this.http.post<Chamis>('http://localhost:5000/api/users/'+newChamisLogin.login,newChamisLogin);
+        return this.http.post<Chamis>('http://localhost:5000/api/users/'+loginGoogle,newChamisLogin);
     }
 }

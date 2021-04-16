@@ -41,36 +41,33 @@
       </mat-select>
     </mat-form-field>
 
-    <!-- Test ajouter un chamis ! -->
+    <!-- Test formulaire pour ajouter un chamis ! -->
 
-    <hr/>
-    <br/>
-    <div class="formulaire-Chamis-Container">
+    <div class="formulaire-Chamis-Container" *ngIf="auth.user | async as user">
+      <hr/>
+      <h2>Pas encore inscrit ? fait le grosse folle :</h2>
+      <br/>
       <mat-form-field appearance="fill">
         <mat-label>nom</mat-label>
-        <input matInput>
+        <input matInput type="string" #nom>
       </mat-form-field>
       <br/>
       <mat-form-field appearance="fill">
         <mat-label>prénom</mat-label>
-        <input matInput> 
+        <input matInput type="string" #prenom> 
       </mat-form-field>
       <br>
-      <button mat-raised-button color="primary" type="submit">M'inscrire chez les chamis !</button>
+      <button mat-raised-button color="primary" (click)="creerNouveauChamis(user.email,nom.value,prenom.value)">M'inscrire chez les chamis !</button>
     </div>
     <br/>
 
     <!-- Fin formulaire ajouter un chamis ! -->
 
-    <!-- Test ajouter un chamis ! -->
-    <hr />
-    <br/>
-    <div *ngIf="auth.user | async as user" >
-      <button (click)="creerNouveauChamis(user.email)">Ajoutez moi aux chamis !</button>
+    <div *ngIf="auth.user | async as user" class="hide">
+      <button (click)="creerNouveauChamis(user.email,'test','test')">Ajoutez moi aux chamis !</button>
       <b *ngFor="let post of post$ | async"> </b>
     </div>
     
-    <!-- Fin test ajouter un chamis ! -->
 
     <!-- Test du fetch des chamis ! -->
     <br/>
@@ -82,7 +79,7 @@
         <th>nom</th>
         <th>prénom</th>
       </tr>
-      <tr *ngFor="let chamis of chamis$ | async">
+      <tr *ngFor="let chamis of tousLeschamis$ | async">
         <td>{{chamis.login}}</td>
         <td>{{chamis.nom}}</td>
         <td>{{chamis.prenom}}</td>
@@ -113,18 +110,22 @@
       </tr>
     </table>
     <hr />
-    <!-- Fin du fetch des defis ! -->
+     <!-- Fin du fetch des defis ! -->
 
     <yaga-map [lng]="5.724524" [lat]="45.188529" [zoom]="12">
       <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer>
-      <yaga-marker  [lng] = "5.724524"
-                    [lat] = "45.188529"
+     <!-- <yaga-polyline [(color)] = '#f00' [geoJSON]="https://data.mobilites-m.fr/api/lines/json?types=ligne"></yaga-polyline>-->
+     <yaga-marker *ngFor="let defis of defis$ | async "
+                    [lng] = defis.longitude
+                    [lat] = defis.latitude
                     [display] = "true"
                     [opacity] = "1"
+                    (click)="affichedefis(defis.id)"
+                    [title]= defis.titre 
                     >
         <yaga-icon [iconUrl]="iconMarker" ></yaga-icon>
       </yaga-marker>
+      <yaga-zoom-control> ZOOM </yaga-zoom-control>  
     </yaga-map>
-    
   </mat-drawer-content>
 </mat-drawer-container>
