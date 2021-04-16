@@ -17,6 +17,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ChamisService } from './chamis/chamis.service'
 import { DefisService } from './defis/defis.service'
+
 @NgModule({
   declarations: [
     AppComponent
@@ -35,7 +36,7 @@ import { DefisService } from './defis/defis.service'
     YagaModule,
     AngularFireAuthModule,
     AngularFireModule.initializeApp(environment.firebase),
-    HttpClientModule
+    HttpClientModule,
   ],
   
   providers: [ ChamisService,DefisService],

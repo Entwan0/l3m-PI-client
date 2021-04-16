@@ -1,7 +1,6 @@
 import { ChamisService } from './chamis/chamis.service';
-import { ChangeDetectionStrategy, Component, SystemJsNgModuleLoader } from '@angular/core';
+import { ChangeDetectionStrategy, Component} from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { HttpClientModule } from '@angular/common/http';
 import firebase from 'firebase/app';
 import { OSM_TILE_LAYER_URL } from '@yaga/leaflet-ng2';
 import { DefisService } from './defis/defis.service';
@@ -27,7 +26,7 @@ export class AppComponent {
   }
 
   creerNouveauChamis(login:any): void{
-    this.post$ = this.chamisService.postChamis(login);
+    this.post$ = this.chamisService.postChamis(login,"testNom","testPrenom");
   }
 
   login(): void {

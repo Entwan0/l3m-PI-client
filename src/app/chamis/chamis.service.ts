@@ -17,10 +17,11 @@ export class ChamisService {
         return this.http.get('http://localhost:5000/api/users/');
     }
 
-    postChamis(loginPassed:string): Observable<Chamis>{
+    postChamis(loginGoogle:string,nomChoisi:string,prenomChoisi:string): Observable<Chamis>{
         const newChamisLogin = {
-            age: 20,
-            login: loginPassed
+            login: loginGoogle,
+            nom: nomChoisi,
+            prenom: prenomChoisi
         };
 
         console.log("login recu : " + newChamisLogin.login);
