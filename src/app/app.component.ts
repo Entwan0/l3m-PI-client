@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component} from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { OSM_TILE_LAYER_URL } from '@yaga/leaflet-ng2';
-import { DefisService } from './defis/defis.service';
+import { defis, DefisService } from './defis/defis.service';
 
 @Component({
   selector: 'app-root',
@@ -19,10 +19,20 @@ export class AppComponent {
   tousLeschamis$:any;
   defis$:any;
   post$:any;
+  defisSelectionne:boolean;
+  leDefis:defis;
+  isAfficheListeDefis:boolean;
+  isAfficheListeChamis:boolean;
+  IsSincrireChamis:boolean;
 
   constructor(public auth: AngularFireAuth,private chamisService:ChamisService, private defisservice: DefisService) {
     this.tousLeschamis$ = this.chamisService.RecupereTousLesChamis();
     this.defis$ = this.defisservice.fetchDefis();
+    this.defisSelectionne = false;
+    this.isAfficheListeDefis = false;
+    this.isAfficheListeChamis = false;
+    this.IsSincrireChamis = false;
+    this.leDefis = this.defisservice.initializeNouveauDefis();
   }
   
   login(): void {
@@ -41,7 +51,26 @@ export class AppComponent {
     this.post$ = this.chamisService.postChamis(login,nom,prenom);
   }
 
-  affichedefis(id:number){
+  afficheLedefis(id:any){
+    this.defisSelectionne = true;
+    this.leDefis.id = id.id;
+    this.leDefis.titre = id.titre;
+    this.leDefis.description = id.description;
+    console.log(id);
+  }
 
+  /*
+  * Change valeur du boolean, si boolean = vrai alors le rend faux. Si boolean est faux alors le rend vrai.
+  */
+  afficheListeDefis():void{
+    this.isAfficheListeDefis = !this.isAfficheListeDefis;
+  }
+
+  afficheListeChamis():void{
+    this.isAfficheListeChamis = !this.isAfficheListeChamis
+  }
+
+  afficheInscriptionChamis():void{
+    this.IsSincrireChamis = !this.IsSincrireChamis
   }
 }

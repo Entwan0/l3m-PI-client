@@ -14,12 +14,12 @@ export class ChamisService {
     constructor(private http:HttpClient){
     }
 
-    RecupereTousLesChamis(): Observable<Object>{
-        return this.http.get('http://localhost:5000/api/users/');
+    RecupereTousLesChamis(): Observable<Chamis>{
+        return this.http.get<Chamis>('http://localhost:5000/api/users/');
     }
 
-    RecuperUnChamis(login:string): Observable<Object>{
-        return this.http.get('http://localhost:5000/api/users/'+login);
+    RecuperUnChamis(login:string): Observable<Chamis>{
+        return this.http.get<Chamis>('http://localhost:5000/api/users/'+login);
     }
 
     postChamis(loginGoogle:string,nomChoisi:string,prenomChoisi:string): Observable<Chamis>{

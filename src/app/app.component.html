@@ -29,7 +29,18 @@
 
 <mat-drawer-container class="example-container">
   <mat-drawer #drawer [mode]="mode.value">
-    Placez votre menu ici...
+    <mat-sidenav-container>
+      <mat-sidenav>defis</mat-sidenav>
+      <mat-sidenav-content (click)="afficheListeDefis()">Afficher la liste des defis</mat-sidenav-content>
+    </mat-sidenav-container>
+    <mat-sidenav-container>
+      <mat-sidenav>chamis</mat-sidenav>
+      <mat-sidenav-content (click)="afficheListeChamis()">Afficher la liste des chamis</mat-sidenav-content>
+    </mat-sidenav-container>
+    <mat-sidenav-container>
+      <mat-sidenav>inscriptionChamis</mat-sidenav>
+      <mat-sidenav-content (click)="afficheInscriptionChamis()">Vous inscrire chez les chamis !</mat-sidenav-content>
+    </mat-sidenav-container>
   </mat-drawer>
   <mat-drawer-content>
     <mat-form-field>
@@ -41,76 +52,108 @@
       </mat-select>
     </mat-form-field>
 
-    <!-- Test formulaire pour ajouter un chamis ! -->
-
-    <div class="formulaire-Chamis-Container" *ngIf="auth.user | async as user">
+    <!-- formulaire pour ajouter un chamis ! -->
+    <div *ngIf="IsSincrireChamis">
       <hr/>
-      <h2>Pas encore inscrit ? fait le grosse folle :</h2>
-      <br/>
-      <mat-form-field appearance="fill">
-        <mat-label>nom</mat-label>
-        <input matInput type="string" #nom>
-      </mat-form-field>
-      <br/>
-      <mat-form-field appearance="fill">
-        <mat-label>prénom</mat-label>
-        <input matInput type="string" #prenom> 
-      </mat-form-field>
-      <br>
-      <button mat-raised-button color="primary" (click)="creerNouveauChamis(user.email,nom.value,prenom.value)">M'inscrire chez les chamis !</button>
+      <form class="formulaire-Chamis-Container" *ngIf="auth.user | async as user">
+        <h2>Pas encore inscrit ?</h2>
+        <br/>
+        <mat-form-field appearance="fill">
+          <mat-label>nom</mat-label>
+          <input matInput type="string" #nom>
+        </mat-form-field>
+        <br/>
+        <mat-form-field appearance="fill">
+          <mat-label>prénom</mat-label>
+          <input matInput type="string" #prenom> 
+        </mat-form-field>
+        <br>
+        <button mat-raised-button color="primary" (click)="creerNouveauChamis(user.email,nom.value,prenom.value)">M'inscrire chez les chamis !</button>
+      </form>
+      <hr/>
     </div>
-    <br/>
-
     <!-- Fin formulaire ajouter un chamis ! -->
 
+    <!-- Bouton qui creer un chamis -->
     <div *ngIf="auth.user | async as user" class="hide">
       <button (click)="creerNouveauChamis(user.email,'test','test')">Ajoutez moi aux chamis !</button>
       <b *ngFor="let post of post$ | async"> </b>
     </div>
     
 
-    <!-- Test du fetch des chamis ! -->
-    <br/>
-    <hr />
-    <h3> Les chamis : </h3>
-    <table border="1px solid black">
-      <tr>
-        <th>Login</th>
-        <th>nom</th>
-        <th>prénom</th>
-      </tr>
-      <tr *ngFor="let chamis of tousLeschamis$ | async">
-        <td>{{chamis.login}}</td>
-        <td>{{chamis.nom}}</td>
-        <td>{{chamis.prenom}}</td>
-      </tr>
-    </table>
-    <br/>
-    <hr/>
+    <!-- fetch des chamis ! -->
+    <div *ngIf="isAfficheListeChamis">
+      <br/>
+      <hr />
+      <h3> Les chamis : </h3>
+      <table border="1px solid black">
+        <tr>
+          <th>Login</th>
+          <th>nom</th>
+          <th>prénom</th>
+        </tr>
+        <tr *ngFor="let chamis of tousLeschamis$ | async">
+          <td>{{chamis.login}}</td>
+          <td>{{chamis.nom}}</td>
+          <td>{{chamis.prenom}}</td>
+        </tr>
+      </table>
+      <br/>
+      <hr/>
+    </div>
     <!-- Fin du fetch des chamis ! -->
 
-    <!-- Test fetch des defis ! -->
-    <h3> Les defis : </h3>
-    <table  border="1px solid black">
-      <tr>
-        <th> ID </th>
-        <th> Titre </th>
-        <th> Date de Creation </th>
-        <th> Auteur </th>
-        <th> Latitude </th>
-        <th> Longitude </th>
-      </tr>
-      <tr *ngFor="let defis of defis$ | async">
-        <td> {{defis.id}} </td>
-        <td> {{defis.titre}} </td>
-        <td> {{defis.dateDeCreation}} </td>
-        <td> {{defis.loginAuteur}} </td>
-        <td> {{defis.latitude}} </td>
-        <td> {{defis.longitude}} </td>
-      </tr>
-    </table>
-    <hr />
-     <!-- Fin du fetch des defis ! -->
+    <!-- fetch des defis ! -->
+    <div *ngIf="isAfficheListeDefis">
+      <hr />
+      <h3> Les defis : </h3>
+      <table  border="1px solid black">
+        <tr>
+          <th> ID </th>
+          <th> Titre </th>
+          <th> Date de Creation </th>
+          <th> Auteur </th>
+          <th> Latitude </th>
+          <th> Longitude </th>
+        </tr>
+        <tr *ngFor="let defis of defis$ | async">
+          <td> {{defis.id }} </td>
+          <td> {{defis.titre}} </td>
+          <td> {{defis.dateDeCreation}} </td>
+          <td> {{defis.loginAuteur}} </td>
+          <td> {{defis.latitude}} </td>
+          <td> {{defis.longitude}} </td>
+        </tr>
+      </table>
+      <hr />
+    </div>
+    <!-- Fin du fetch des defis ! -->
+
+    <!-- Affiche le défis selectionnes sur la carte -->
+    <div *ngIf="defisSelectionne">
+      <h2>Votre défis : </h2>
+      <table  border="1px solid black">
+        <tr>
+          <th> ID </th>
+          <th> Titre </th>
+          <th> descriptionDefis </th>
+        </tr>
+        <tr>
+          <td>
+            {{ leDefis.id }}
+          </td>
+          <td>
+            {{ leDefis.titre }}
+          </td>
+          <td>
+            {{ leDefis.description }}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Code relatif à la carte -->
+    <h1 class="carteTitre"> Voici la carte des défis :</h1>
 
     <yaga-map [lng]="5.724524" [lat]="45.188529" [zoom]="12">
       <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer>
@@ -120,7 +163,7 @@
                     [lat] = defis.latitude
                     [display] = "true"
                     [opacity] = "1"
-                    (click)="affichedefis(defis.id)"
+                    (click)="afficheLedefis(defis)"
                     [title]= defis.titre 
                     >
         <yaga-icon [iconUrl]="iconMarker" ></yaga-icon>
