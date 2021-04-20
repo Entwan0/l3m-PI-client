@@ -53,4 +53,13 @@
     font-weight: bold;
     font-size: xx-large;
   }
+
+  mat-sidenav-container{
+    cursor: pointer;
+    border: 1px solid black;
+  }
+
+  mat-sidenav-container:hover{
+    background-color: grey;
+  }
 }
