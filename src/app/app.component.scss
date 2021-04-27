@@ -21,45 +21,60 @@
   }
 
   mat-drawer-container {
-    flex: 1 1;
+    border-left: solid rgb(14, 95, 104) 15px;
     > mat-drawer {
-      border-right: solid grey 3px;
+      
+      
+      flex: 1 1;
+      background-color: rgb(19, 127, 139);
+      
+      mat-sidenav-content {
+        display: block;
+        color: rgb(157, 221, 228);
+        padding: 8px 16px;
+        text-decoration: none;
+        background-color: rgb(19, 127, 139);
+      }
+
+      mat-sidenav-content:hover {
+        background-color: rgba(19, 127, 139, 0.473);
+        color: rgb(32, 76, 80);
+      }
+     
+
     }
   }
 
+  .hide{
+    visibility: hidden;
+  }
+
+  div{
+    background-color:rgba(19, 127, 139, 0.747);
+    color: rgb(255, 255, 255);
+    
+  }
+
+
   yaga-map {
-    height: 480px;
+    height: 400px;
+  }
+  tr{
+    
   }
 
   th{
-    background-color: rgb(87, 87, 87);
+    background-color: rgb(19, 127, 139);
+    color:white;
+    padding: 10px;
+
   }
 
   td{
-    background-color: rgb(153, 153, 153);
+    background-color: rgba(19, 127, 139, 0.568);
   }
 
   .formulaire-Chamis-Container{
     text-align: center
-  }
-
-  .hide{
-    display: none;
-  }
-
-  .carteTitre{
-    text-align: center;
-    color: #1a1c80;
-    font-weight: bold;
-    font-size: xx-large;
-  }
-
-  mat-sidenav-container{
-    cursor: pointer;
-    border: 1px solid black;
-  }
-
-  mat-sidenav-container:hover{
-    background-color: grey;
   }
 }

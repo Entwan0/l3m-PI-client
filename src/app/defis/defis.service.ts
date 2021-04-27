@@ -7,8 +7,8 @@ export interface defis {
     titre:string;
     dateDeCreation:Date;
     description:string;
-    longinAuteur:string;
-    latitue:string;
+    loginAuteur:string;
+    latitude:string;
     longitude:string;
 }
 
@@ -20,6 +20,10 @@ export class DefisService{
 
     fetchDefis():Observable<defis>{
         return this.http.get<defis>(this._url);
+    }
+
+    recuperUnDefis(id:string):Observable<defis>{
+        return this.http.get<defis>(this._url+id);
     }
    
     afficheUndefis(id : string){  
@@ -33,10 +37,24 @@ export class DefisService{
             titre: "",
             dateDeCreation: new Date('01-01-0000'),
             description: "",
-            longinAuteur: "",
-            latitue: "",
+            loginAuteur: "",
+            latitude: "",
             longitude: ""
         }
         return leDefis;
     }
+
+    updateDefis(nId: string, nTitre: string, nDate: any, nDescription: string, nLoginAuteur: string, nLatitude: string, nLongitude: string):Observable<defis> {
+        let newDefis:defis = {
+            id:nId,
+            titre:nTitre,
+            dateDeCreation:nDate,
+            description:nDescription,
+            loginAuteur:nLoginAuteur,
+            latitude:nLatitude,
+            longitude:nLongitude
+        };
+        console.log("id /" + newDefis.id + "/ titre /" + newDefis.titre + "/ date /" + newDefis.dateDeCreation + "/ description /" + newDefis.description + "/ login auteur /" + newDefis.loginAuteur + "/ latitude /" + newDefis.latitude + "/ longitude /" + newDefis.longitude);
+        return this.http.put<defis>('http://localhost:5000/api/defis/'+newDefis.id,newDefis);
+      }
 }

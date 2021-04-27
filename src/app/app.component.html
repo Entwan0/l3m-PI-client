@@ -1,174 +1,241 @@
-<mat-toolbar>
-  <button mat-icon-button class="example-icon" aria-label="Menu">
-    <mat-icon (click)="drawer.toggle()">menu</mat-icon>
-  </button>
-  <label>
-    Projet intégrateur
-  </label>
-  <label class="spacer"></label>
-
-  <mat-icon *ngIf="(auth.user | async) === null" [matMenuTriggerFor]="menuConnect">
-    account_circle
-  </mat-icon>
-  <mat-icon *ngIf="auth.user | async as user" [matMenuTriggerFor]="menuDisconnect">
-    <img [src]="user.photoURL">
-  </mat-icon>
-
-  <mat-menu #menuConnect="matMenu">
-    <button mat-menu-item (click)="login()">
-      &nbsp;
-      <span>Compte Google</span>
+<html>
+  <router-outlet></router-outlet>
+  <mat-toolbar>
+    <button mat-icon-button class="example-icon" aria-label="Menu">
+      <mat-icon (click)="drawer.toggle()">menu</mat-icon>
     </button>
-  </mat-menu>
-  <mat-menu #menuDisconnect="matMenu">
-    <button mat-menu-item (click)="logout()">
-      <span >Déconnexion</span>
-    </button>
-  </mat-menu>
-</mat-toolbar>
-
-<mat-drawer-container class="example-container">
-  <mat-drawer #drawer [mode]="mode.value">
-    <mat-sidenav-container>
-      <mat-sidenav>defis</mat-sidenav>
-      <mat-sidenav-content (click)="afficheListeDefis()">Afficher la liste des defis</mat-sidenav-content>
-    </mat-sidenav-container>
-    <mat-sidenav-container>
-      <mat-sidenav>chamis</mat-sidenav>
-      <mat-sidenav-content (click)="afficheListeChamis()">Afficher la liste des chamis</mat-sidenav-content>
-    </mat-sidenav-container>
-    <mat-sidenav-container>
-      <mat-sidenav>inscriptionChamis</mat-sidenav>
-      <mat-sidenav-content (click)="afficheInscriptionChamis()">Vous inscrire chez les chamis !</mat-sidenav-content>
-    </mat-sidenav-container>
-  </mat-drawer>
-  <mat-drawer-content>
-    <mat-form-field>
-      <mat-label>Sidenav mode</mat-label>
-      <mat-select #mode value="push">
-        <mat-option value="side">Side</mat-option>
-        <mat-option value="over">Over</mat-option>
-        <mat-option value="push">Push</mat-option>
-      </mat-select>
-    </mat-form-field>
-
-    <!-- formulaire pour ajouter un chamis ! -->
-    <div *ngIf="IsSincrireChamis">
-      <hr/>
-      <form class="formulaire-Chamis-Container" *ngIf="auth.user | async as user">
-        <h2>Pas encore inscrit ?</h2>
+    <label>
+      Projet intégrateur
+    </label>
+    <label class="spacer"></label>
+  
+    <mat-icon *ngIf="(auth.user | async) === null" [matMenuTriggerFor]="menuConnect">
+      account_circle
+    </mat-icon>
+    <mat-icon *ngIf="auth.user | async as user" [matMenuTriggerFor]="menuDisconnect">
+      <img [src]="user.photoURL">
+    </mat-icon>
+  
+    <mat-menu #menuConnect="matMenu">
+      <button mat-menu-item (click)="login()">
+        &nbsp;
+        <span>Compte Google</span>
+      </button>
+    </mat-menu>
+    <mat-menu #menuDisconnect="matMenu">
+      <button mat-menu-item (click)="logout()">
+        <span >Déconnexion</span>
+      </button>
+    </mat-menu>
+  </mat-toolbar>
+  
+  <mat-drawer-container class="example-container">
+    <mat-drawer #drawer [mode]="mode.value">
+      <mat-sidenav-container>
+        <mat-sidenav>defis</mat-sidenav>
+        <mat-sidenav-content (click)="afficheListeDefis()">Afficher la liste des defis</mat-sidenav-content>
+      </mat-sidenav-container>
+      <mat-sidenav-container>
+        <mat-sidenav>chamis</mat-sidenav>
+        <mat-sidenav-content (click)="afficheListeChamis()">Afficher la liste des chamis</mat-sidenav-content>
+      </mat-sidenav-container>
+      <mat-sidenav-container>
+        <mat-sidenav>inscriptionChamis</mat-sidenav>
+        <mat-sidenav-content (click)="afficheInscriptionChamis()">Vous inscrire chez les chamis !</mat-sidenav-content>
+      </mat-sidenav-container>
+      <mat-sidenav-container>
+        <mat-sidenav>EditDefis</mat-sidenav>
+        <mat-sidenav-content (click)="AfficheEditDefis()">Edit les défis</mat-sidenav-content>
+      </mat-sidenav-container>
+    </mat-drawer>
+    <mat-drawer-content>
+      <mat-form-field>
+        <mat-label>Sidenav mode</mat-label>
+        <mat-select #mode value="push">
+          <mat-option value="side">Side</mat-option>
+          <mat-option value="over">Over</mat-option>
+          <mat-option value="push">Push</mat-option>
+        </mat-select>
+      </mat-form-field>
+  
+      <!-- formulaire pour ajouter un chamis ! -->
+      <div *ngIf="IsSincrireChamis">
+        <hr/>
+        <form class="formulaire-Chamis-Container" *ngIf="auth.user | async as user">
+          <h2>Pas encore inscrit ?</h2>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>nom</mat-label>
+            <input matInput type="string" #nom>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>prénom</mat-label>
+            <input matInput type="string" #prenom> 
+          </mat-form-field>
+          <br>
+          <button mat-raised-button color="primary" (click)="creerNouveauChamis(user.email,nom.value,prenom.value)">M'inscrire chez les chamis !</button>
+        </form>
+        <hr/>
+      </div>
+      <!-- Fin formulaire ajouter un chamis ! -->
+  
+      <!-- Bouton qui creer un chamis -->
+      <div *ngIf="auth.user | async as user" class="hide">
+        <button (click)="creerNouveauChamis(user.email,'test','test')">Ajoutez moi aux chamis !</button>
+        <b *ngFor="let post of post$ | async"> </b>
+      </div>
+      
+  
+      <!-- fetch des chamis ! -->
+      <div *ngIf="isAfficheListeChamis">
         <br/>
-        <mat-form-field appearance="fill">
-          <mat-label>nom</mat-label>
-          <input matInput type="string" #nom>
-        </mat-form-field>
+        <hr />
+        <h3> Les chamis : </h3>
+        <table border="1px solid black">
+          <tr>
+            <th>Login</th>
+            <th>nom</th>
+            <th>prénom</th>
+          </tr>
+          <tr *ngFor="let chamis of tousLeschamis$ | async">
+            <td>{{chamis.login}}</td>
+            <td>{{chamis.nom}}</td>
+            <td>{{chamis.prenom}}</td>
+          </tr>
+        </table>
         <br/>
-        <mat-form-field appearance="fill">
-          <mat-label>prénom</mat-label>
-          <input matInput type="string" #prenom> 
-        </mat-form-field>
-        <br>
-        <button mat-raised-button color="primary" (click)="creerNouveauChamis(user.email,nom.value,prenom.value)">M'inscrire chez les chamis !</button>
-      </form>
-      <hr/>
-    </div>
-    <!-- Fin formulaire ajouter un chamis ! -->
+        <hr/>
+      </div>
+      <!-- Fin du fetch des chamis ! -->
 
-    <!-- Bouton qui creer un chamis -->
-    <div *ngIf="auth.user | async as user" class="hide">
-      <button (click)="creerNouveauChamis(user.email,'test','test')">Ajoutez moi aux chamis !</button>
-      <b *ngFor="let post of post$ | async"> </b>
-    </div>
-    
+      <h2 *ngIf=IsAfficheEditDefis>Cliquer sur un défis pour le modifier</h2>
+  
+      <!-- fetch des defis ! -->
+      <div *ngIf="isAfficheListeDefis">
+        <hr />
+        <h3> Les defis : </h3>
+        <table  border="1px solid black">
+          <tr>
+            <th> ID </th>
+            <th> Titre </th>
+            <th> Date de Creation </th>
+            <th> Auteur </th>
+            <th> Latitude </th>
+            <th> Longitude </th>
+          </tr>
+          <tr *ngFor="let defis of defis$ | async"
+          (click)="afficheLedefis(defis)">
+            <td> {{defis.id }} </td>
+            <td> {{defis.titre}} </td>
+            <td> {{defis.dateDeCreation}} </td>
+            <td> {{defis.loginAuteur}} </td>
+            <td> {{defis.latitude}} </td>
+            <td> {{defis.longitude}} </td>
+          </tr>
+        </table>
+        <hr />
+      </div>
+      <!-- Fin du fetch des defis ! -->
 
-    <!-- fetch des chamis ! -->
-    <div *ngIf="isAfficheListeChamis">
-      <br/>
-      <hr />
-      <h3> Les chamis : </h3>
-      <table border="1px solid black">
-        <tr>
-          <th>Login</th>
-          <th>nom</th>
-          <th>prénom</th>
-        </tr>
-        <tr *ngFor="let chamis of tousLeschamis$ | async">
-          <td>{{chamis.login}}</td>
-          <td>{{chamis.nom}}</td>
-          <td>{{chamis.prenom}}</td>
-        </tr>
-      </table>
-      <br/>
-      <hr/>
-    </div>
-    <!-- Fin du fetch des chamis ! -->
-
-    <!-- fetch des defis ! -->
-    <div *ngIf="isAfficheListeDefis">
-      <hr />
-      <h3> Les defis : </h3>
-      <table  border="1px solid black">
-        <tr>
-          <th> ID </th>
-          <th> Titre </th>
-          <th> Date de Creation </th>
-          <th> Auteur </th>
-          <th> Latitude </th>
-          <th> Longitude </th>
-        </tr>
-        <tr *ngFor="let defis of defis$ | async">
-          <td> {{defis.id }} </td>
-          <td> {{defis.titre}} </td>
-          <td> {{defis.dateDeCreation}} </td>
-          <td> {{defis.loginAuteur}} </td>
-          <td> {{defis.latitude}} </td>
-          <td> {{defis.longitude}} </td>
-        </tr>
-      </table>
-      <hr />
-    </div>
-    <!-- Fin du fetch des defis ! -->
-
-    <!-- Affiche le défis selectionnes sur la carte -->
-    <div *ngIf="defisSelectionne">
-      <h2>Votre défis : </h2>
-      <table  border="1px solid black">
-        <tr>
-          <th> ID </th>
-          <th> Titre </th>
-          <th> descriptionDefis </th>
-        </tr>
-        <tr>
-          <td>
-            {{ leDefis.id }}
-          </td>
-          <td>
-            {{ leDefis.titre }}
-          </td>
-          <td>
-            {{ leDefis.description }}
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <!-- Code relatif à la carte -->
-    <h1 class="carteTitre"> Voici la carte des défis :</h1>
-
-    <yaga-map [lng]="5.724524" [lat]="45.188529" [zoom]="12">
-      <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer>
-     <!-- <yaga-polyline [(color)] = '#f00' [geoJSON]="https://data.mobilites-m.fr/api/lines/json?types=ligne"></yaga-polyline>-->
-     <yaga-marker *ngFor="let defis of defis$ | async "
-                    [lng] = defis.longitude
-                    [lat] = defis.latitude
-                    [display] = "true"
-                    [opacity] = "1"
-                    (click)="afficheLedefis(defis)"
-                    [title]= defis.titre 
-                    >
-        <yaga-icon [iconUrl]="iconMarker" ></yaga-icon>
-      </yaga-marker>
-      <yaga-zoom-control> ZOOM </yaga-zoom-control>  
-    </yaga-map>
-  </mat-drawer-content>
-</mat-drawer-container>
+      <!-- Affiche l'éditeur de défis -->
+      <div *ngIf="IsAfficheEditDefis">
+        <h1>Le defis</h1>
+        <div class="formulaire-Chamis-Container">
+          <mat-form-field appearance="fill">
+            <mat-label>id</mat-label>
+            <input matInput type="string" [value]=leDefis.id #id> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Titre</mat-label>
+            <input matInput type="string" [value]=leDefis.titre #titre> 
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>date de création</mat-label>
+            <input matInput type="string" [value]=leDefis.dateDeCreation #dateCreation> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>description</mat-label>
+            <textarea matInput type="string" [value]=leDefis.description #description> </textarea>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>login auteur</mat-label>
+            <input matInput type="string" [value]=leDefis.loginAuteur #longinAuteur> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>latitude</mat-label>
+            <input matInput type="string" [value]=leDefis.latitude #latitude> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>longitude</mat-label>
+            <input matInput type="string" [value]=leDefis.longitude #longitude> 
+          </mat-form-field>
+          <br/>
+          <button mat-raised-button color="primary" (click)="modifieDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value)">Modifier mon défis</button>
+        </div>
+      </div>
+      <!-- Fin de l'éditeur de défis -->
+  
+      <!-- Affiche le défis selectionnes sur la carte -->
+      <div *ngIf="isDefisSelectionne">
+        <div *ngIf="!IsAfficheEditDefis">
+          <h2>Votre défis : </h2>
+          <table  border="1px solid black">
+            <tr>
+              <th> ID </th>
+              <th> Titre </th>
+              <th> descriptionDefis </th>
+            </tr>
+            <tr>
+              <td>
+                {{ leDefis.id }}
+              </td>
+              <td>
+                {{ leDefis.titre }}
+              </td>
+              <td>
+                {{ leDefis.description }}
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+  
+      <!-- Code relatif à la carte -->
+      <h1 class="carteTitre"> Voici la carte des défis :</h1>
+  
+      <yaga-map [lng]="5.724524" [lat]="45.188529" [zoom]="12">
+        <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer>
+       <!-- <yaga-polyline [(color)] = '#f00' [geoJSON]="https://data.mobilites-m.fr/api/lines/json?types=ligne"></yaga-polyline>-->
+       <yaga-marker *ngFor="let defis of defis$ | async "
+                      [lng] = defis.longitude
+                      [lat] = defis.latitude
+                      [display] = "true"
+                      [opacity] = "1"
+                      (click)="afficheLedefis(defis)"
+                      [title]= defis.titre 
+                      >
+          <yaga-icon [iconUrl]="iconMarker" ></yaga-icon>
+          <yaga-popup>
+            <table>
+              <tr>
+                <td> Description </td>
+              </tr>
+            <tr>
+              <td> {{defis.description}} </td>
+            </tr>
+          </table>
+           </yaga-popup> 
+          
+        </yaga-marker>
+        <yaga-zoom-control> ZOOM </yaga-zoom-control>  
+      </yaga-map>
+    </mat-drawer-content>
+  </mat-drawer-container>  
+</html>

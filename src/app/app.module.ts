@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
@@ -17,6 +16,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ChamisService } from './chamis/chamis.service'
 import { DefisService } from './defis/defis.service'
+import { AppComponent } from './app.component'
 
 @NgModule({
   declarations: [
@@ -38,7 +38,6 @@ import { DefisService } from './defis/defis.service'
     AngularFireModule.initializeApp(environment.firebase),
     HttpClientModule,
   ],
-  
   providers: [ ChamisService,DefisService],
   bootstrap: [AppComponent]
 })

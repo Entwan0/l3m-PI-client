@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { OSM_TILE_LAYER_URL } from '@yaga/leaflet-ng2';
 import { defis, DefisService } from './defis/defis.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -19,20 +20,29 @@ export class AppComponent {
   tousLeschamis$:any;
   defis$:any;
   post$:any;
-  defisSelectionne:boolean;
+  isDefisSelectionne:boolean;
   leDefis:defis;
   isAfficheListeDefis:boolean;
   isAfficheListeChamis:boolean;
   IsSincrireChamis:boolean;
+  IsAfficheEditDefis:boolean;
+  id$:string="";
 
-  constructor(public auth: AngularFireAuth,private chamisService:ChamisService, private defisservice: DefisService) {
+  constructor(public auth: AngularFireAuth,private chamisService:ChamisService, private defisservice: DefisService,private router: Router) {
     this.tousLeschamis$ = this.chamisService.RecupereTousLesChamis();
     this.defis$ = this.defisservice.fetchDefis();
-    this.defisSelectionne = false;
+    this.isDefisSelectionne = false;
     this.isAfficheListeDefis = false;
     this.isAfficheListeChamis = false;
     this.IsSincrireChamis = false;
+    this.IsAfficheEditDefis = false;
     this.leDefis = this.defisservice.initializeNouveauDefis();
+  }
+
+  ngOnInit() {
+    if (this.router.url.startsWith("/user")) {
+      console.log("Nous sommes dans l'écran de gestion des utilisateurs.");        
+  }
   }
   
   login(): void {
@@ -52,10 +62,14 @@ export class AppComponent {
   }
 
   afficheLedefis(id:any){
-    this.defisSelectionne = true;
+    this.isDefisSelectionne = true;
     this.leDefis.id = id.id;
     this.leDefis.titre = id.titre;
+    this.leDefis.dateDeCreation = id.dateDeCreation;
     this.leDefis.description = id.description;
+    this.leDefis.loginAuteur = id.loginAuteur;
+    this.leDefis.latitude = id.latitude;
+    this.leDefis.longitude = id.longitude;
     console.log(id);
   }
 
@@ -63,14 +77,32 @@ export class AppComponent {
   * Change valeur du boolean, si boolean = vrai alors le rend faux. Si boolean est faux alors le rend vrai.
   */
   afficheListeDefis():void{
+    if(!this.IsAfficheEditDefis)
     this.isAfficheListeDefis = !this.isAfficheListeDefis;
   }
 
   afficheListeChamis():void{
+    if(!this.IsAfficheEditDefis)
     this.isAfficheListeChamis = !this.isAfficheListeChamis
   }
 
   afficheInscriptionChamis():void{
     this.IsSincrireChamis = !this.IsSincrireChamis
+  }
+
+  AfficheEditDefis():void{
+    this.isAfficheListeDefis = !this.isAfficheListeDefis;
+    this.IsAfficheEditDefis = !this.IsAfficheEditDefis;
+    this.isDefisSelectionne = false;
+  }
+  
+  setID(idDefis:string){
+    console.log("id recu : " + idDefis);
+    this.id$=idDefis;
+    console.log("id recu : " + this.id$);
+  }
+
+  modifieDefis(id:string,titre:string,date:any,description:string,loginAuteur:string,latitude:string,longitude:string){
+    this.defisservice.updateDefis(id,titre,date,description,loginAuteur,latitude,longitude);
   }
 }

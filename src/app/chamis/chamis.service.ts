@@ -28,7 +28,7 @@ export class ChamisService {
             nom: nomChoisi,
             prenom: prenomChoisi
         };
-
+        
         return this.http.post<Chamis>('http://localhost:5000/api/users/'+loginGoogle,newChamisLogin);
     }
 }
