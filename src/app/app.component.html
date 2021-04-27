@@ -141,7 +141,7 @@
       <!-- Affiche l'éditeur de défis -->
       <div *ngIf="IsAfficheEditDefis">
         <h1>Le defis</h1>
-        <div class="formulaire-Chamis-Container">
+        <form class="formulaire-Chamis-Container">
           <mat-form-field appearance="fill">
             <mat-label>id</mat-label>
             <input matInput type="string" [value]=leDefis.id #id> 
@@ -178,7 +178,7 @@
           </mat-form-field>
           <br/>
           <button mat-raised-button color="primary" (click)="modifieDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value)">Modifier mon défis</button>
-        </div>
+        </form>
       </div>
       <!-- Fin de l'éditeur de défis -->
   

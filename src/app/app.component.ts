@@ -77,23 +77,32 @@ export class AppComponent {
   * Change valeur du boolean, si boolean = vrai alors le rend faux. Si boolean est faux alors le rend vrai.
   */
   afficheListeDefis():void{
-    if(!this.IsAfficheEditDefis)
-    this.isAfficheListeDefis = !this.isAfficheListeDefis;
+    if(!this.IsAfficheEditDefis){
+      this.isAfficheListeDefis = !this.isAfficheListeDefis;
+      this.IsSincrireChamis = false;
+    }
   }
 
   afficheListeChamis():void{
-    if(!this.IsAfficheEditDefis)
-    this.isAfficheListeChamis = !this.isAfficheListeChamis
+    if(!this.IsAfficheEditDefis){
+      this.isAfficheListeChamis = !this.isAfficheListeChamis
+      this.IsSincrireChamis = false;
+    }
   }
 
   afficheInscriptionChamis():void{
     this.IsSincrireChamis = !this.IsSincrireChamis
+    this.IsAfficheEditDefis = false;
+    this.isAfficheListeDefis = false;
+    this.isAfficheListeChamis = false;
   }
 
   AfficheEditDefis():void{
-    this.isAfficheListeDefis = !this.isAfficheListeDefis;
-    this.IsAfficheEditDefis = !this.IsAfficheEditDefis;
-    this.isDefisSelectionne = false;
+      this.isAfficheListeDefis = !this.isAfficheListeDefis;
+      this.IsAfficheEditDefis = !this.IsAfficheEditDefis;
+      this.isAfficheListeChamis = false;
+      this.IsSincrireChamis = false;
+      this.isDefisSelectionne = false;
   }
   
   setID(idDefis:string){
@@ -103,6 +112,13 @@ export class AppComponent {
   }
 
   modifieDefis(id:string,titre:string,date:any,description:string,loginAuteur:string,latitude:string,longitude:string){
-    this.defisservice.updateDefis(id,titre,date,description,loginAuteur,latitude,longitude);
+    this.defisservice.updateDefis(id,titre,date,description,loginAuteur,latitude,longitude).subscribe(
+      (response) => {
+        console.log("Put à fonctionné avec la valeur : " + response);
+      },
+      (error) => {
+        console.error("Erreur sur le prut : " + error);
+      }
+    );
   }
 }
