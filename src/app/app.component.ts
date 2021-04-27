@@ -26,6 +26,7 @@ export class AppComponent {
   isAfficheListeChamis:boolean;
   IsSincrireChamis:boolean;
   IsAfficheEditDefis:boolean;
+  popupEditDefis:boolean;
   id$:string="";
 
   constructor(public auth: AngularFireAuth,private chamisService:ChamisService, private defisservice: DefisService,private router: Router) {
@@ -36,13 +37,14 @@ export class AppComponent {
     this.isAfficheListeChamis = false;
     this.IsSincrireChamis = false;
     this.IsAfficheEditDefis = false;
+    this.popupEditDefis = false;
     this.leDefis = this.defisservice.initializeNouveauDefis();
   }
 
   ngOnInit() {
     if (this.router.url.startsWith("/user")) {
       console.log("Nous sommes dans l'écran de gestion des utilisateurs.");        
-  }
+    }
   }
   
   login(): void {
@@ -80,6 +82,8 @@ export class AppComponent {
     if(!this.IsAfficheEditDefis){
       this.isAfficheListeDefis = !this.isAfficheListeDefis;
       this.IsSincrireChamis = false;
+    }else{
+      this.popupEditDefis = true;
     }
   }
 
@@ -87,6 +91,8 @@ export class AppComponent {
     if(!this.IsAfficheEditDefis){
       this.isAfficheListeChamis = !this.isAfficheListeChamis
       this.IsSincrireChamis = false;
+    }else{
+      this.popupEditDefis = true;
     }
   }
 

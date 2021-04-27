@@ -57,6 +57,16 @@
           <mat-option value="push">Push</mat-option>
         </mat-select>
       </mat-form-field>
+
+      <div class="overlay" *ngIf="popupEditDefis">
+        <div class="popup">
+            <h2>Vous etes en mode édition de défis !</h2>
+            <a class="close" (click)="popupEditDefis = false">&times;</a>
+            <div class="content">
+            Veuillez fermer l'éditeur de défis avant d'ouvrir autre chose !
+            </div>
+        </div>
+      </div>
   
       <!-- formulaire pour ajouter un chamis ! -->
       <div *ngIf="IsSincrireChamis">
