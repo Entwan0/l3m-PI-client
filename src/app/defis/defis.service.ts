@@ -28,7 +28,7 @@ export class DefisService{
    
     afficheUndefis(id : string){  
         console.log("id recu : " + id);
-        return this.http.get('http://localhost:5000/api/defis/'+id);
+        return this.http.get(this._url+id);
     }
 
     initializeNouveauDefis():defis{
@@ -54,7 +54,25 @@ export class DefisService{
             latitude:nLatitude,
             longitude:nLongitude
         };
-        console.log("id /" + newDefis.id + "/ titre /" + newDefis.titre + "/ date /" + newDefis.dateDeCreation + "/ description /" + newDefis.description + "/ login auteur /" + newDefis.loginAuteur + "/ latitude /" + newDefis.latitude + "/ longitude /" + newDefis.longitude);
-        return this.http.put<defis>('http://localhost:5000/api/defis/'+newDefis.id,newDefis);
+    console.log("id /" + newDefis.id + "/ titre /" + newDefis.titre + "/ date /" + newDefis.dateDeCreation + "/ description /" + newDefis.description + "/ login auteur /" + newDefis.loginAuteur + "/ latitude /" + newDefis.latitude + "/ longitude /" + newDefis.longitude);
+    return this.http.put<defis>(this._url+newDefis.id,newDefis);
+    }
+
+    postDefis(nId: string, nTitre: string, nDate: any, nDescription:string, nLoginAuteur:string, nLatitude:string, nLongitude:string): Observable<defis> {
+        const newDefis:defis = {
+            id:nId,
+            titre:nTitre,
+            dateDeCreation:nDate,
+            description:nDescription,
+            loginAuteur:nLoginAuteur,
+            latitude:nLatitude,
+            longitude:nLongitude
+        };
+        
+        console.log("la latitude : " + newDefis.latitude + " et la longitude : " + newDefis.longitude);
+        return this.http.post<defis>(
+          this._url + nId,
+          newDefis
+        );
       }
 }

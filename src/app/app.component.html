@@ -47,6 +47,10 @@
         <mat-sidenav>EditDefis</mat-sidenav>
         <mat-sidenav-content (click)="AfficheEditDefis()">Edit les défis</mat-sidenav-content>
       </mat-sidenav-container>
+      <mat-sidenav-container>
+        <mat-sidenav>EditeChamis</mat-sidenav>
+        <mat-sidenav-content (click)="AfficheEditChamis()">Edit les chamis</mat-sidenav-content>
+      </mat-sidenav-container>
     </mat-drawer>
     <mat-drawer-content>
       <mat-form-field>
@@ -64,6 +68,16 @@
             <a class="close" (click)="popupEditDefis = false">&times;</a>
             <div class="content">
             Veuillez fermer l'éditeur de défis avant d'ouvrir autre chose !
+            </div>
+        </div>
+      </div>
+
+      <div class="overlay" *ngIf="popupEditChamis">
+        <div class="popup">
+            <h2>Vous etes en mode édition de chamis !</h2>
+            <a class="close" (click)="popupEditChamis = false">&times;</a>
+            <div class="content">
+            Veuillez fermer l'éditeur de chamis avant d'ouvrir autre chose !
             </div>
         </div>
       </div>
@@ -96,7 +110,7 @@
         <b *ngFor="let post of post$ | async"> </b>
       </div>
       
-  
+      <h2 *ngIf=IsAfficheEditChamis>Cliquer sur un Chamis pour le modifier</h2>
       <!-- fetch des chamis ! -->
       <div *ngIf="isAfficheListeChamis">
         <br/>
@@ -108,7 +122,8 @@
             <th>nom</th>
             <th>prénom</th>
           </tr>
-          <tr *ngFor="let chamis of tousLeschamis$ | async">
+          <tr *ngFor="let chamis of tousLeschamis$ | async"
+            (click)="afficheLeChamis(chamis)">
             <td>{{chamis.login}}</td>
             <td>{{chamis.nom}}</td>
             <td>{{chamis.prenom}}</td>
@@ -120,7 +135,6 @@
       <!-- Fin du fetch des chamis ! -->
 
       <h2 *ngIf=IsAfficheEditDefis>Cliquer sur un défis pour le modifier</h2>
-  
       <!-- fetch des defis ! -->
       <div *ngIf="isAfficheListeDefis">
         <hr />
@@ -147,6 +161,33 @@
         <hr />
       </div>
       <!-- Fin du fetch des defis ! -->
+
+       <!-- Affiche l'éditeur de Chamis -->
+       <div *ngIf="IsAfficheEditChamis">
+        <h1>Le Chamis</h1>
+          <form class="formulaire-Chamis-Container">
+            <mat-form-field appearance="fill">
+              <mat-label>Login</mat-label>
+              <input matInput type="string" [value]=leChamis.login #login> 
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>Nom</mat-label>
+              <input matInput type="string" [value]=leChamis.nom #nom> 
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="fill">
+              <mat-label>Prenom</mat-label>
+              <input matInput type="string" [value]=leChamis.prenom #prenom> 
+            </mat-form-field>
+            <br/>
+            <br/>
+            <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieChamis(login.value,nom.value,prenom.value)">Modifier mon chamis</button>
+            <button mat-raised-button color="primary" (click)="creerNouveauChamis(login.value,nom.value,prenom.value)">Créer un nouveau chamis</button>
+          </form>
+        </div>
+      
+      <!-- Fin de l'éditeur de chamis -->
 
       <!-- Affiche l'éditeur de défis -->
       <div *ngIf="IsAfficheEditDefis">
@@ -187,7 +228,8 @@
             <input matInput type="string" [value]=leDefis.longitude #longitude> 
           </mat-form-field>
           <br/>
-          <button mat-raised-button color="primary" (click)="modifieDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value)">Modifier mon défis</button>
+          <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value)">Modifier mon défis</button>
+          <button mat-raised-button color="primary" (click)="creerNouveauDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value)">Créer un nouveau défis</button>
         </form>
       </div>
       <!-- Fin de l'éditeur de défis -->
@@ -219,18 +261,17 @@
   
       <!-- Code relatif à la carte -->
       <h1 class="carteTitre"> Voici la carte des défis :</h1>
-  
+
       <yaga-map [lng]="5.724524" [lat]="45.188529" [zoom]="12">
         <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer>
-       <!-- <yaga-polyline [(color)] = '#f00' [geoJSON]="https://data.mobilites-m.fr/api/lines/json?types=ligne"></yaga-polyline>-->
-       <yaga-marker *ngFor="let defis of defis$ | async "
+        <yaga-polyline *ngFor="let ligne of lignes$ | async" [geoJSON]="ligne"></yaga-polyline>
+        <yaga-marker *ngFor="let defis of defis$ | async "
                       [lng] = defis.longitude
                       [lat] = defis.latitude
                       [display] = "true"
                       [opacity] = "1"
                       (click)="afficheLedefis(defis)"
-                      [title]= defis.titre 
-                      >
+                      [title]= defis.titre>
           <yaga-icon [iconUrl]="iconMarker" ></yaga-icon>
           <yaga-popup>
             <table>
@@ -241,8 +282,7 @@
               <td> {{defis.description}} </td>
             </tr>
           </table>
-           </yaga-popup> 
-          
+           </yaga-popup>
         </yaga-marker>
         <yaga-zoom-control> ZOOM </yaga-zoom-control>  
       </yaga-map>

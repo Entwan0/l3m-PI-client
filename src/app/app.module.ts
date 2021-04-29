@@ -14,10 +14,11 @@ import { YagaModule } from '@yaga/leaflet-ng2';
 import { environment } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { ChamisService } from './chamis/chamis.service'
-import { DefisService } from './defis/defis.service'
+import { ChamisService } from './chamis/chamis.service';
+import { DefisService } from './defis/defis.service';
+import { LignesService } from './lignes/lignes.service';
 import { AppComponent } from './app.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     AppComponent
@@ -39,7 +40,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
     HttpClientModule,
     NgbModule,
   ],
-  providers: [ ChamisService,DefisService],
+  providers: [ ChamisService,DefisService, LignesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
