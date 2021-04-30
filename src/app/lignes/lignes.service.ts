@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import {Feature, FeatureCollection} from 'geojson';
+import { from } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 export interface FeatureLigne extends Feature {
   // type: 'Feature';
@@ -37,7 +39,7 @@ export class LignesService{
     constructor(private http:HttpClient) { 
     }
 
-    fetchLignes():Observable<FeatureLigne>{
-        return this.http.get<FeatureLigne>(this._url);
+    fetchLignes():Observable<FeatureLigneCollection>{
+        return this.http.get<FeatureLigneCollection>(this._url).pipe(map((obs: { features: any; }) => obs.features));
     }
 }

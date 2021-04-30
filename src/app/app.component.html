@@ -51,6 +51,10 @@
         <mat-sidenav>EditeChamis</mat-sidenav>
         <mat-sidenav-content (click)="AfficheEditChamis()">Edit les chamis</mat-sidenav-content>
       </mat-sidenav-container>
+      <mat-sidenav-container>
+        <mat-sidenav>EditeArrets</mat-sidenav>
+        <mat-sidenav-content (click)="AfficheEditArrets()">Edit les arrets</mat-sidenav-content>
+      </mat-sidenav-container>
     </mat-drawer>
     <mat-drawer-content>
       <mat-form-field>
@@ -81,9 +85,19 @@
             </div>
         </div>
       </div>
+
+      <div class="overlay" *ngIf="popupEditArrets">
+        <div class="popup">
+            <h2>Vous etes en mode édition de arrets !</h2>
+            <a class="close" (click)="popupEditArrets = false">&times;</a>
+            <div class="content">
+            Veuillez fermer l'éditeur de arrets avant d'ouvrir autre chose !
+            </div>
+        </div>
+      </div>
   
       <!-- formulaire pour ajouter un chamis ! -->
-      <div *ngIf="IsSincrireChamis">
+      <div *ngIf="isSincrireChamis">
         <hr/>
         <form class="formulaire-Chamis-Container" *ngIf="auth.user | async as user">
           <h2>Pas encore inscrit ?</h2>
@@ -110,7 +124,7 @@
         <b *ngFor="let post of post$ | async"> </b>
       </div>
       
-      <h2 *ngIf=IsAfficheEditChamis>Cliquer sur un Chamis pour le modifier</h2>
+      <h2 *ngIf=isAfficheEditChamis>Cliquer sur un Chamis pour le modifier</h2>
       <!-- fetch des chamis ! -->
       <div *ngIf="isAfficheListeChamis">
         <br/>
@@ -134,7 +148,7 @@
       </div>
       <!-- Fin du fetch des chamis ! -->
 
-      <h2 *ngIf=IsAfficheEditDefis>Cliquer sur un défis pour le modifier</h2>
+      <h2 *ngIf=isAfficheEditDefis>Cliquer sur un défis pour le modifier</h2>
       <!-- fetch des defis ! -->
       <div *ngIf="isAfficheListeDefis">
         <hr />
@@ -163,7 +177,7 @@
       <!-- Fin du fetch des defis ! -->
 
        <!-- Affiche l'éditeur de Chamis -->
-       <div *ngIf="IsAfficheEditChamis">
+       <div *ngIf="isAfficheEditChamis">
         <h1>Le Chamis</h1>
           <form class="formulaire-Chamis-Container">
             <mat-form-field appearance="fill">
@@ -190,7 +204,7 @@
       <!-- Fin de l'éditeur de chamis -->
 
       <!-- Affiche l'éditeur de défis -->
-      <div *ngIf="IsAfficheEditDefis">
+      <div *ngIf="isAfficheEditDefis">
         <h1>Le defis</h1>
         <form class="formulaire-Chamis-Container">
           <mat-form-field appearance="fill">
@@ -199,7 +213,7 @@
           </mat-form-field>
           <br/>
           <mat-form-field appearance="fill">
-            <mat-label>Titre</mat-label>
+            <mat-label>Titre</mat-label>i
             <input matInput type="string" [value]=leDefis.titre #titre> 
           </mat-form-field>
           <br>
@@ -233,10 +247,64 @@
         </form>
       </div>
       <!-- Fin de l'éditeur de défis -->
+
+       <!-- Affiche l'éditeur des Arrets -->
+       <div *ngIf="isAfficheEditArrets">
+        <h1>Arret</h1>
+        <form class="formulaire-Chamis-Container">
+        <mat-form-field>
+          <mat-label>Liste D'arret</mat-label>
+          <mat-select #mode>
+            <mat-option *ngFor="let arret of arret$ | async"  value={{arret}} 
+            (click)="afficheArret(arret)" value={{arret}}
+            #lab> {{arret.nomArret}}
+          </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Nom Arret</mat-label>
+            <input matInput type="string" [value]=Arret.nomArret  #nomA> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Code</mat-label>
+            <input matInput type="string" [value]=Arret.code #code> 
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>StreetMap</mat-label>
+            <input matInput type="string" [value]=Arret.streetMap #streetMap> 
+          </mat-form-field>
+          <br/>
+          <form action = "https://www.google.com/maps/@45.1901837,5.7280555,3a,75y,356.64h,87.64t/data=!3m6!1e1!3m4!1sxw1ZbgO7fqfMll5M56WsiA!2e0!7i13312!8i6656">
+            <button type="submit">Cliquez sur moi</button>
+         </form>
+         <br>
+          <mat-form-field appearance="fill">
+            <mat-label>GoogleMap</mat-label>
+            <input matInput type="string" [value]=Arret.googleMap #googleMap> 
+          </mat-form-field>
+          <br>
+          <form action="https://www.google.com/maps/place/Hubert+Dubedout+-+Maison+du+Tourisme/@45.1901837,5.7280555,21z">
+            <button type="submit">Cliquez sur moi</button>
+         </form>
+          <mat-form-field appearance="fill">
+            <mat-label>Nom Ville</mat-label>
+            <input matInput type="string" [value]=Arret.nomVille #nomV> 
+          </mat-form-field>
+          <br/>
+          <br/>
+          <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieArret(nomA.value,code.value,streetMap.value,googleMap.value,nomV.value)">Modifier Arret</button>
+          <button mat-raised-button color="primary" (click)="creerNouveauArret(nomA.value,code.value,streetMap.value,googleMap.value,nomV.value)">Ajoute Arret</button>
+        </form>
+        </div>
+      
+      <!-- Fin de l'éditeur de L'arret -->  
   
       <!-- Affiche le défis selectionnes sur la carte -->
       <div *ngIf="isDefisSelectionne">
-        <div *ngIf="!IsAfficheEditDefis">
+        <div *ngIf="!isAfficheEditDefis">
           <h2>Votre défis : </h2>
           <table  border="1px solid black">
             <tr>
@@ -258,13 +326,17 @@
           </table>
         </div>
       </div>
-  
+      
       <!-- Code relatif à la carte -->
       <h1 class="carteTitre"> Voici la carte des défis :</h1>
 
       <yaga-map [lng]="5.724524" [lat]="45.188529" [zoom]="12">
         <yaga-tile-layer [(url)]="tileLayerUrl"></yaga-tile-layer>
-        <yaga-polyline *ngFor="let ligne of lignes$ | async" [geoJSON]="ligne"></yaga-polyline>
+        <yaga-polyline *ngFor="let ligne of lignes$| async"
+        [geoJSON]="ligne"
+        [weight]=3
+        [color]= "rgbToString(ligne)"
+        ></yaga-polyline>
         <yaga-marker *ngFor="let defis of defis$ | async "
                       [lng] = defis.longitude
                       [lat] = defis.latitude
@@ -286,6 +358,6 @@
         </yaga-marker>
         <yaga-zoom-control> ZOOM </yaga-zoom-control>  
       </yaga-map>
-    </mat-drawer-content>
+     </mat-drawer-content>
   </mat-drawer-container>  
 </html>

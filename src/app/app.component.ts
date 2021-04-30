@@ -6,7 +6,8 @@ import firebase from 'firebase/app';
 import { OSM_TILE_LAYER_URL } from '@yaga/leaflet-ng2';
 import { defis, DefisService } from './defis/defis.service';
 import { Router } from '@angular/router';
-import { LignesService, FeatureLigne, GeometryMultiLineString } from './lignes/lignes.service'
+import { LignesService, FeatureLigne, FeatureLigneCollection } from './lignes/lignes.service'
+import { arret, ArretService } from './arret/arret.service';
 
 @Component({
   selector: 'app-root',
@@ -23,33 +24,44 @@ export class AppComponent {
   defis$:any;
   lignes$:any;
   post$:any;
+  arret$:any;
   isDefisSelectionne:boolean;
   leDefis:defis;
   leChamis:Chamis;
+  Arret : arret;
   isAfficheListeDefis:boolean;
   isAfficheListeChamis:boolean;
   isChamisSelectionne: boolean;
-  IsSincrireChamis:boolean;
-  IsAfficheEditDefis:boolean;
-  IsAfficheEditChamis:boolean;
+  isSincrireChamis:boolean;
+  isAfficheEditDefis:boolean;
+  isAfficheEditChamis:boolean;
+  isAfficheEditArret:boolean;
+  isAfficheEditArrets:boolean;
   popupEditDefis:boolean;
   popupEditChamis:boolean;
+  popupEditArrets:boolean;
   
-  constructor(public auth: AngularFireAuth,private chamisService:ChamisService, private defisservice: DefisService,private router: Router, private lignesService:LignesService) {
+  constructor(public auth: AngularFireAuth,private arretService : ArretService,private chamisService:ChamisService, private defisservice: DefisService,private router: Router, private lignesService:LignesService) {
     this.tousLeschamis$ = this.chamisService.RecupereTousLesChamis();
     this.defis$ = this.defisservice.fetchDefis();
+    this.arret$ = this.arretService.RecupereTousLesArrets();
     this.lignes$ = this.lignesService.fetchLignes();
     this.isDefisSelectionne = false;
     this.isChamisSelectionne = false;
     this.isAfficheListeDefis = false;
     this.isAfficheListeChamis = false;
-    this.IsSincrireChamis = false;
-    this.IsAfficheEditDefis = false;
-    this.IsAfficheEditChamis = false;
+    this.isSincrireChamis = false;
+    this.isAfficheEditDefis = false;
+    this.isAfficheEditChamis = false;
+    this.isAfficheEditArret = false;
+    this.isAfficheEditArrets = false;
     this.popupEditDefis = false;
     this.popupEditChamis = false;
+    this.popupEditArrets = false;
     this.leDefis = this.defisservice.initializeNouveauDefis();
     this.leChamis = this.chamisService.initializeNouveauChamis();
+    this.Arret = this.arretService.initializeNouveauArrets();
+
   }
 
   ngOnInit() {
@@ -82,6 +94,19 @@ export class AppComponent {
     console.log("/"+latitude+"/"+longitude+"/");
   }
 
+  creerNouveauArret(nomA :string,code:string,streetMap:string,googleMap :string,nomV: string){
+    this.arretService.AjouteArret(nomA,code,streetMap,googleMap,nomV).subscribe(
+      (response) => {
+        console.log("post à fonctionné avec la valeur : " + response);
+      },
+      (error) => {
+        console.error("Erreur sur le post : " + error);
+      }
+    );
+    console.log("/"+nomA+"/"+code+"/");
+  }
+
+
   creerNouveauChamis(login:any,nom:string,prenom:string){
     this.post$ = this.chamisService.postChamis(login,nom,prenom);
   }
@@ -106,28 +131,43 @@ export class AppComponent {
     console.log(id);
   }
 
+  afficheArret(id:any){
+    this.Arret.nomArret = id.nomArret;
+    this.Arret.code = id.code;
+    this.Arret.streetMap = id.streetMap;
+    this.Arret.googleMap = id.googleMap;
+    this.Arret.nomVille = id.nomVille;
+    console.log("eee" + id);
+  }
   /*
   * Change valeur du boolean, si boolean = vrai alors le rend faux. Si boolean est faux alors le rend vrai.
   */
   afficheListeDefis():void{
-    if(!this.IsAfficheEditDefis){
-      if(!this.IsAfficheEditChamis){
-        this.isAfficheListeDefis = !this.isAfficheListeDefis;
-        this.IsSincrireChamis = false;
+    if(!this.isAfficheEditDefis){
+      if(!this.isAfficheEditChamis){
+        if(!this.isAfficheEditArrets){
+          this.isAfficheListeDefis = !this.isAfficheListeDefis;
+          this.isSincrireChamis = false;
+        }else{
+          this.popupEditArrets = true;
+        }
       }else{
         this.popupEditChamis = true;
       }
     }else{
       this.popupEditDefis = true;
-      this.popupEditChamis = true;
     }
   }
 
   afficheListeChamis():void{
-    if(!this.IsAfficheEditDefis){
-      if(!this.IsAfficheEditChamis){
-        this.isAfficheListeChamis = !this.isAfficheListeChamis
-        this.IsSincrireChamis = false;
+    if(!this.isAfficheEditDefis){
+      if(!this.isAfficheEditChamis){
+        if(!this.isAfficheEditArrets){
+          this.isAfficheListeChamis = !this.isAfficheListeChamis
+          this.isSincrireChamis = false;
+        }else{
+          this.popupEditArrets = true;
+        }
       }else{
         this.popupEditChamis = true;
       }
@@ -137,11 +177,15 @@ export class AppComponent {
   }
 
   afficheInscriptionChamis():void{
-    if(!this.IsAfficheEditDefis){
-      if(!this.IsAfficheEditChamis){
-        this.IsSincrireChamis = !this.IsSincrireChamis
-        this.isAfficheListeDefis = false;
-        this.isAfficheListeChamis = false;
+    if(!this.isAfficheEditDefis){
+      if(!this.isAfficheEditChamis){
+        if(!this.isAfficheEditArrets){
+          this.isSincrireChamis = !this.isSincrireChamis
+          this.isAfficheListeDefis = false;
+          this.isAfficheListeChamis = false;
+        }else{
+          this.popupEditArrets = true;
+        }
       }else{
         this.popupEditChamis = true;
       }
@@ -151,22 +195,32 @@ export class AppComponent {
   }
 
   AfficheEditDefis():void{
-      this.isAfficheListeDefis = !this.isAfficheListeDefis;
-      this.IsAfficheEditDefis = !this.IsAfficheEditDefis;
-      this.isAfficheListeChamis = false;
-      this.IsSincrireChamis = false;
-      this.isDefisSelectionne = false;
-      this.IsAfficheEditChamis = false;
+    this.isAfficheListeDefis = !this.isAfficheListeDefis;
+    this.isAfficheEditDefis = !this.isAfficheEditDefis;
+    this.isAfficheListeChamis = false;
+    this.isSincrireChamis = false;
+    this.isDefisSelectionne = false;
+    this.isAfficheEditChamis = false;
   }
 
   AfficheEditChamis():void{
     this.isAfficheListeChamis = !this.isAfficheListeChamis;
-    this.IsAfficheEditChamis = !this.IsAfficheEditChamis;
+    this.isAfficheEditChamis = !this.isAfficheEditChamis;
     this.isAfficheListeDefis = false;
-    this.IsSincrireChamis = false;
+    this.isSincrireChamis = false;
     this.isDefisSelectionne = false;
-    this.IsAfficheEditDefis = false;
-}
+    this.isAfficheEditDefis = false;
+  }
+
+  AfficheEditArrets():void{
+    this.isAfficheEditArrets = !this.isAfficheEditArrets;
+    this.isAfficheListeDefis = false;
+    this.isAfficheListeChamis = false;
+    this.isSincrireChamis = false;
+    this.isAfficheEditChamis = false;
+    this.isDefisSelectionne = false;
+    this.isAfficheEditDefis = false;
+  }
   
   modifieDefis(id:string,titre:string,date:any,description:string,loginAuteur:string,latitude:string,longitude:string){
     this.defisservice.updateDefis(id,titre,date,description,loginAuteur,latitude,longitude).subscribe(
@@ -188,5 +242,20 @@ export class AppComponent {
         console.error("Erreur sur le put : " + error);
       }
     );
+  }
+
+  modifieArret(nomA :string,code:string,streetMap:string,googleMap :string,nomV: string){
+    this.arretService.updateArret(nomA,code,streetMap,googleMap,nomV).subscribe(
+      (response) => {
+        console.log("Put à fonctionné avec la valeur : " + response);
+      },
+      (error) => {
+        console.error("Erreur sur le put : " + error);
+      }
+    );
+  }
+
+  rgbToString(ligne: FeatureLigne):string{
+    return 'rgb('+ligne.properties.COULEUR+')';
   }
 }

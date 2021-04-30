@@ -19,6 +19,7 @@ import { DefisService } from './defis/defis.service';
 import { LignesService } from './lignes/lignes.service';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { ArretService } from './arret/arret.service';
 @NgModule({
   declarations: [
     AppComponent
@@ -40,7 +41,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     NgbModule,
   ],
-  providers: [ ChamisService,DefisService, LignesService],
+  providers: [ ChamisService,DefisService, LignesService, ArretService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
