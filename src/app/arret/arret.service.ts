@@ -1,14 +1,15 @@
 import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Injectable } from '@angular/core';
 
 export interface arret {
     nomArret: string,
     code: string,
-    streetMap: string,
-    googleMap: string,
-    nomVille: string
-}
+    latitude: string,
+    longitude: string,
+    nomVille: string,
+    streetView: string
+} 
 
 @Injectable()
 export class ArretService {
@@ -29,36 +30,41 @@ export class ArretService {
         let Arret : arret = {
             nomArret: "",
             code: "",
-            streetMap: "",
-            googleMap : "",
-            nomVille : ""
+            latitude: "",
+            longitude : "",
+            nomVille : "",
+            streetView: ""
         }
         return Arret;
     }
 
-    updateArret(nNomArret: string, nCode: string, nStreetMap: string,nGoogleMap:string, nNomVille : string): Observable<arret> {
+    updateArret(nNomArret: string, nCode: string, nlatitude: string,nlongitude:string, nNomVille : string, nstreetView: string): Observable<arret> {
         let newArret : arret = {
             nomArret : nNomArret,
             code : nCode,
-            streetMap : nStreetMap,
-            googleMap : nGoogleMap,
-            nomVille : nNomVille
-           
+            latitude : nlatitude,
+            longitude : nlongitude,
+            nomVille : nNomVille,
+            streetView: nstreetView
         };
-        console.log("nomArret /" + newArret.nomArret + "/ code /" + newArret.code + "/ streetMap /" + newArret.streetMap + "/ googleMap /" + newArret.googleMap+ "/ nomVille /" + newArret.nomVille);
+        console.log("nomArret /" + newArret.nomArret + "/ code /" + newArret.code + "/ latitude /" + newArret.latitude + "/ longitude /" + newArret.longitude+ "/ nomVille /" + newArret.nomVille + "/ nstreetView /" + newArret.streetView);
        
         return this.http.put<arret>(this._url+ newArret.nomArret,newArret);
       }
-      AjouteArret(nNomArret: string, nCode: string, nStreetMap: string,nGoogleMap:string, nNomVille : string): Observable<arret> {
+      AjouteArret(nNomArret: string, nCode: string, nlatitude: string,nlongitude:string, nNomVille : string, nstreetView: string): Observable<arret> {
         const newArret : arret = {
             nomArret : nNomArret,
             code : nCode,
-            streetMap : nStreetMap,
-            googleMap : nGoogleMap,
-            nomVille : nNomVille
-           
+            latitude : nlatitude,
+            longitude : nlongitude,
+            nomVille : nNomVille,
+            streetView : nstreetView
         };
-        console.log("nomArret /" + newArret.nomArret + "/ code /" + newArret.code + "/ streetMap /" + newArret.streetMap + "/ googleMap /" + newArret.googleMap+ "/ nomVille /" + newArret.nomVille);
+        console.log("nomArret /" + newArret.nomArret + "/ code /" + newArret.code + "/ latitude /" + newArret.latitude + "/ longitude /" + newArret.longitude+ "/ nomVille /" + newArret.nomVille + "/ nstreetView /" + newArret.streetView ) ;
         return this.http.post<arret>(this._url + nNomArret,newArret);
       }
+
+
+
 }
+
