@@ -213,7 +213,7 @@
           </mat-form-field>
           <br/>
           <mat-form-field appearance="fill">
-            <mat-label>Titre</mat-label>i
+            <mat-label>Titre</mat-label>
             <input matInput type="string" [value]=leDefis.titre #titre> 
           </mat-form-field>
           <br>
@@ -252,52 +252,59 @@
        <div *ngIf="isAfficheEditArrets">
         <h1>Arret</h1>
         <form class="formulaire-Chamis-Container">
-        <mat-form-field>
-          <mat-label>Liste D'arret</mat-label>
-          <mat-select #mode>
-            <mat-option *ngFor="let arret of arret$ | async"  value={{arret}} 
-            (click)="afficheArret(arret)" value={{arret}}
-            #lab> {{arret.nomArret}}
-          </mat-option>
-          </mat-select>
-        </mat-form-field>
-        <br/>
-          <mat-form-field appearance="fill">
-            <mat-label>Nom Arret</mat-label>
-            <input matInput type="string" [value]=Arret.nomArret  #nomA> 
+          <mat-form-field>
+            <mat-label>Liste D'arret</mat-label>
+            <mat-select #mode>
+              <mat-option *ngFor="let arret of arret$ | async"  value={{arret}} 
+              (click)="afficheArret(arret)" value={{arret}}
+              #lab> {{arret.nomArret}}
+            </mat-option>
+            </mat-select>
           </mat-form-field>
           <br/>
-          <mat-form-field appearance="fill">
-            <mat-label>Code</mat-label>
-            <input matInput type="string" [value]=Arret.code #code> 
-          </mat-form-field>
-          <br>
-          <mat-form-field appearance="fill">
-            <mat-label>StreetMap</mat-label>
-            <input matInput type="string" [value]=Arret.streetMap #streetMap> 
-          </mat-form-field>
-          <br/>
-          <form action = "https://www.google.com/maps/@45.1901837,5.7280555,3a,75y,356.64h,87.64t/data=!3m6!1e1!3m4!1sxw1ZbgO7fqfMll5M56WsiA!2e0!7i13312!8i6656">
-            <button type="submit">Cliquez sur moi</button>
-         </form>
-         <br>
-          <mat-form-field appearance="fill">
-            <mat-label>GoogleMap</mat-label>
-            <input matInput type="string" [value]=Arret.googleMap #googleMap> 
-          </mat-form-field>
-          <br>
-          <form action="https://www.google.com/maps/place/Hubert+Dubedout+-+Maison+du+Tourisme/@45.1901837,5.7280555,21z">
-            <button type="submit">Cliquez sur moi</button>
-         </form>
-          <mat-form-field appearance="fill">
-            <mat-label>Nom Ville</mat-label>
-            <input matInput type="string" [value]=Arret.nomVille #nomV> 
-          </mat-form-field>
-          <br/>
-          <br/>
-          <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieArret(nomA.value,code.value,streetMap.value,googleMap.value,nomV.value)">Modifier Arret</button>
-          <button mat-raised-button color="primary" (click)="creerNouveauArret(nomA.value,code.value,streetMap.value,googleMap.value,nomV.value)">Ajoute Arret</button>
-        </form>
+            <mat-form-field appearance="fill">
+              <mat-label>Nom Arret</mat-label>
+              <input matInput type="string" [value]=Arret.nomArret  #nomA> 
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>Code</mat-label>
+              <input matInput type="string" [value]=Arret.code #code> 
+            </mat-form-field>
+            <br>
+
+            <mat-form-field appearance="fill">
+              <mat-label>Latitude</mat-label>
+              <input matInput type="string" [value]=Arret.latitude #latitude> 
+            </mat-form-field>
+            <br/>
+            
+            <mat-form-field appearance="fill">
+              <mat-label>Longitude</mat-label>
+              <input matInput type="string" [value]=Arret.longitude #longitude> 
+            </mat-form-field>
+            <br>
+
+            <mat-form-field appearance="fill">
+              <mat-label>StreetView</mat-label>
+              <input matInput type="string" [value]=Arret.streetView #streetView> 
+            </mat-form-field>
+            <br>
+            <form [action]=streetView.value target="_blank">
+              <button type="submit" >StreetVIEW</button>
+            </form>
+            <form [action]="getGoogleMapView(latitude.value,longitude.value)" target="_blank">
+                <button type="submit" >GoogleMapVieW</button>
+            </form>
+            <mat-form-field appearance="fill">
+              <mat-label>Nom Ville</mat-label>
+              <input matInput type="string" [value]=Arret.nomVille #nomV> 
+            </mat-form-field>
+            <br/>
+            <br/>
+            <button mat-raised-button color="primary" (click)="modifieArret(nomA.value,code.value,latitude.value,longitude.value,nomV.value,streetView.value)">Modifier Arret</button>
+            <button mat-raised-button color="primary" (click)="creerNouveauArret(nomA.value,code.value,latitude.value,longitude.value,nomV.value,streetView.value)">Ajoute Arret</button>
+          </form>
         </div>
       
       <!-- Fin de l'éditeur de L'arret -->  

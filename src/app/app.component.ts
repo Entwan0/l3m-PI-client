@@ -1,4 +1,3 @@
-import { Observable } from 'rxjs';
 import { Chamis, ChamisService } from './chamis/chamis.service';
 import { ChangeDetectionStrategy, Component} from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -94,8 +93,8 @@ export class AppComponent {
     console.log("/"+latitude+"/"+longitude+"/");
   }
 
-  creerNouveauArret(nomA :string,code:string,streetMap:string,googleMap :string,nomV: string){
-    this.arretService.AjouteArret(nomA,code,streetMap,googleMap,nomV).subscribe(
+  creerNouveauArret(nomA :string,code:string,latitude:string,longitude :string,nomV: string, nstreetView : string){
+    this.arretService.AjouteArret(nomA,code,latitude,longitude,nomV,nstreetView).subscribe(
       (response) => {
         console.log("post à fonctionné avec la valeur : " + response);
       },
@@ -105,6 +104,8 @@ export class AppComponent {
     );
     console.log("/"+nomA+"/"+code+"/");
   }
+
+
 
 
   creerNouveauChamis(login:any,nom:string,prenom:string){
@@ -134,9 +135,10 @@ export class AppComponent {
   afficheArret(id:any){
     this.Arret.nomArret = id.nomArret;
     this.Arret.code = id.code;
-    this.Arret.streetMap = id.streetMap;
-    this.Arret.googleMap = id.googleMap;
+    this.Arret.latitude = id.latitude;
+    this.Arret.longitude = id.longitude;
     this.Arret.nomVille = id.nomVille;
+    this.Arret.streetView = id.streetView;
     console.log("eee" + id);
   }
   /*
@@ -244,8 +246,8 @@ export class AppComponent {
     );
   }
 
-  modifieArret(nomA :string,code:string,streetMap:string,googleMap :string,nomV: string){
-    this.arretService.updateArret(nomA,code,streetMap,googleMap,nomV).subscribe(
+  modifieArret(nomA :string,code:string,latitude:string,longitude :string,nomV: string, nstreetView : string){
+    this.arretService.updateArret(nomA,code,latitude,longitude,nomV,nstreetView).subscribe(
       (response) => {
         console.log("Put à fonctionné avec la valeur : " + response);
       },
@@ -258,4 +260,14 @@ export class AppComponent {
   rgbToString(ligne: FeatureLigne):string{
     return 'rgb('+ligne.properties.COULEUR+')';
   }
+
+
+
+  getGoogleMapView(lat:string,lng:string){
+    console.log("["+lat+","+lng+"]");
+    return "https://www.google.com/maps/@" + lat + "," + lng + ",21z";
+  }
+
+
+ 
 }
