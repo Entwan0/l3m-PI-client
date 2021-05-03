@@ -38,27 +38,27 @@ export class ArretService {
         return Arret;
     }
 
-    updateArret(nNomArret: string, nCode: string, nlatitude: string,nlongitude:string, nNomVille : string, nstreetView: string): Observable<arret> {
+    updateArret(nNomArret: string, nCode: string, nlatitude: string,nlongitude:string, nNomVille : string, nStreetView: string): Observable<arret> {
         let newArret : arret = {
             nomArret : nNomArret,
             code : nCode,
             latitude : nlatitude,
             longitude : nlongitude,
             nomVille : nNomVille,
-            streetView: nstreetView
+            streetView: nStreetView
         };
         console.log("nomArret /" + newArret.nomArret + "/ code /" + newArret.code + "/ latitude /" + newArret.latitude + "/ longitude /" + newArret.longitude+ "/ nomVille /" + newArret.nomVille + "/ nstreetView /" + newArret.streetView);
        
         return this.http.put<arret>(this._url+ newArret.nomArret,newArret);
       }
-      AjouteArret(nNomArret: string, nCode: string, nlatitude: string,nlongitude:string, nNomVille : string, nstreetView: string): Observable<arret> {
+      AjouteArret(nNomArret: string, nCode: string, nlatitude: string,nlongitude:string, nNomVille : string, nStreetView: string): Observable<arret> {
         const newArret : arret = {
             nomArret : nNomArret,
             code : nCode,
             latitude : nlatitude,
             longitude : nlongitude,
             nomVille : nNomVille,
-            streetView : nstreetView
+            streetView : nStreetView
         };
         console.log("nomArret /" + newArret.nomArret + "/ code /" + newArret.code + "/ latitude /" + newArret.latitude + "/ longitude /" + newArret.longitude+ "/ nomVille /" + newArret.nomVille + "/ nstreetView /" + newArret.streetView ) ;
         return this.http.post<arret>(this._url + nNomArret,newArret);

@@ -26,10 +26,6 @@ export class DefisService{
         return this.http.get<defis>(this._url+id);
     }
    
-    afficheUndefis(id : string){  
-        console.log("id recu : " + id);
-        return this.http.get(this._url+id);
-    }
 
     initializeNouveauDefis():defis{
         let leDefis:defis = {

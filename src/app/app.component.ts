@@ -24,6 +24,8 @@ export class AppComponent {
   lignes$:any;
   post$:any;
   arret$:any;
+  arretTag$:any;
+  undefis$:any;
   isDefisSelectionne:boolean;
   leDefis:defis;
   leChamis:Chamis;
@@ -36,6 +38,7 @@ export class AppComponent {
   isAfficheEditChamis:boolean;
   isAfficheEditArret:boolean;
   isAfficheEditArrets:boolean;
+  isVisiteCommence:boolean;
   popupEditDefis:boolean;
   popupEditChamis:boolean;
   popupEditArrets:boolean;
@@ -45,6 +48,7 @@ export class AppComponent {
     this.defis$ = this.defisservice.fetchDefis();
     this.arret$ = this.arretService.RecupereTousLesArrets();
     this.lignes$ = this.lignesService.fetchLignes();
+    this.arretTag$= this.lignesService.fetchArret();
     this.isDefisSelectionne = false;
     this.isChamisSelectionne = false;
     this.isAfficheListeDefis = false;
@@ -54,13 +58,13 @@ export class AppComponent {
     this.isAfficheEditChamis = false;
     this.isAfficheEditArret = false;
     this.isAfficheEditArrets = false;
+    this.isVisiteCommence = false;
     this.popupEditDefis = false;
     this.popupEditChamis = false;
     this.popupEditArrets = false;
     this.leDefis = this.defisservice.initializeNouveauDefis();
     this.leChamis = this.chamisService.initializeNouveauChamis();
     this.Arret = this.arretService.initializeNouveauArrets();
-
   }
 
   ngOnInit() {
@@ -93,8 +97,8 @@ export class AppComponent {
     console.log("/"+latitude+"/"+longitude+"/");
   }
 
-  creerNouveauArret(nomA :string,code:string,latitude:string,longitude :string,nomV: string, nstreetView : string){
-    this.arretService.AjouteArret(nomA,code,latitude,longitude,nomV,nstreetView).subscribe(
+  creerNouveauArret(nomA :string,code:string,latitude:string,longitude :string,nomV: string, stView : string){
+    this.arretService.AjouteArret(nomA,code,latitude,longitude,nomV,stView).subscribe(
       (response) => {
         console.log("post à fonctionné avec la valeur : " + response);
       },
@@ -104,9 +108,6 @@ export class AppComponent {
     );
     console.log("/"+nomA+"/"+code+"/");
   }
-
-
-
 
   creerNouveauChamis(login:any,nom:string,prenom:string){
     this.post$ = this.chamisService.postChamis(login,nom,prenom);
@@ -122,6 +123,7 @@ export class AppComponent {
 
   afficheLedefis(id:any){
     this.isDefisSelectionne = true;
+    this.isVisiteCommence = true;
     this.leDefis.id = id.id;
     this.leDefis.titre = id.titre;
     this.leDefis.dateDeCreation = id.dateDeCreation;
@@ -140,6 +142,13 @@ export class AppComponent {
     this.Arret.nomVille = id.nomVille;
     this.Arret.streetView = id.streetView;
     console.log("eee" + id);
+  }
+  afficheTagArret(id:any){
+    this.Arret.nomArret = id.properties.LIBELLE;
+    this.Arret.code = id.properties.CODE;
+    this.Arret.latitude = id.geometry.coordinates[0];
+    this.Arret.longitude = id.geometry.coordinates[1];
+    console.log("je suis la" + id);
   }
   /*
   * Change valeur du boolean, si boolean = vrai alors le rend faux. Si boolean est faux alors le rend vrai.
@@ -201,7 +210,6 @@ export class AppComponent {
     this.isAfficheEditDefis = !this.isAfficheEditDefis;
     this.isAfficheListeChamis = false;
     this.isSincrireChamis = false;
-    this.isDefisSelectionne = false;
     this.isAfficheEditChamis = false;
   }
 
@@ -210,7 +218,6 @@ export class AppComponent {
     this.isAfficheEditChamis = !this.isAfficheEditChamis;
     this.isAfficheListeDefis = false;
     this.isSincrireChamis = false;
-    this.isDefisSelectionne = false;
     this.isAfficheEditDefis = false;
   }
 
@@ -220,7 +227,6 @@ export class AppComponent {
     this.isAfficheListeChamis = false;
     this.isSincrireChamis = false;
     this.isAfficheEditChamis = false;
-    this.isDefisSelectionne = false;
     this.isAfficheEditDefis = false;
   }
   
@@ -246,8 +252,8 @@ export class AppComponent {
     );
   }
 
-  modifieArret(nomA :string,code:string,latitude:string,longitude :string,nomV: string, nstreetView : string){
-    this.arretService.updateArret(nomA,code,latitude,longitude,nomV,nstreetView).subscribe(
+  modifieArret(nomA :string,code:string,latitude:string,longitude :string,nomV: string, stView : string){
+    this.arretService.updateArret(nomA,code,latitude,longitude,nomV,stView).subscribe(
       (response) => {
         console.log("Put à fonctionné avec la valeur : " + response);
       },
@@ -260,14 +266,25 @@ export class AppComponent {
   rgbToString(ligne: FeatureLigne):string{
     return 'rgb('+ligne.properties.COULEUR+')';
   }
+  getUndefis(id : string){
+    console.log("laaaa" + id);
+    this.undefis$ = this.defisservice.recuperUnDefis(id);
+    console.log("laaaa" + this.undefis$);
+    this.afficheLedefis(this.undefis$);
 
-
-
+    }
+   
+  
   getGoogleMapView(lat:string,lng:string){
     console.log("["+lat+","+lng+"]");
     return "https://www.google.com/maps/@" + lat + "," + lng + ",21z";
   }
 
-
- 
+  CommencerVisite(){
+    this.isAfficheListeDefis = true;
+    this.isVisiteCommence = true;
+  }
+  method1(){
+    console.log("click reussi");
+  }
 }

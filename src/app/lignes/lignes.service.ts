@@ -36,10 +36,14 @@ export type GeoPoint = [lng: number, lat: number];
 @Injectable()
 export class LignesService{
     private _url: string = "https://data.mobilites-m.fr/api/lines/json?types=ligne&reseaux=SEM"
+    private _urlA: string= "https://data.mobilites-m.fr/api/findType/json?types=arret&query"
     constructor(private http:HttpClient) { 
     }
 
     fetchLignes():Observable<FeatureLigneCollection>{
         return this.http.get<FeatureLigneCollection>(this._url).pipe(map((obs: { features: any; }) => obs.features));
     }
+    fetchArret():Observable<FeatureLigneCollection>{
+      return this.http.get<FeatureLigneCollection>(this._urlA).pipe(map((obs: { features: any; }) => obs.features));
+  }
 }
