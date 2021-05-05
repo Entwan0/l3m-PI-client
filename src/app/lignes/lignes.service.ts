@@ -21,6 +21,25 @@ export interface FeatureLigne extends Feature {
   };
 }
 
+export interface FeatureArret extends Feature {
+  // type: 'Feature';
+  geometry: GeometryMultiLineString;
+  properties: {
+    CODE: string; // "SEM_C1"
+    LIBELLE: string; // "GRENOBLE Cité Jean Macé / MEYLAN Maupertuis"
+    type: string; // "ligne" 'arret'
+    COMMUNE: string; // "C1"
+    arr_visible : number; // 1
+    id: string; // "SEM_C1"
+    epci: string;
+  };
+}
+
+
+export interface FeatureArretCollection extends FeatureCollection {
+  // type: 'FeatureCollection';
+  features: FeatureLigne[];
+}
 export interface FeatureLigneCollection extends FeatureCollection {
   // type: 'FeatureCollection';
   features: FeatureLigne[];
@@ -41,9 +60,9 @@ export class LignesService{
     }
 
     fetchLignes():Observable<FeatureLigneCollection>{
-        return this.http.get<FeatureLigneCollection>(this._url).pipe(map((obs: { features: any; }) => obs.features));
+      return this.http.get<FeatureLigneCollection>(this._url).pipe(map((obs: { features: any; }) => obs.features));
     }
-    fetchArret():Observable<FeatureLigneCollection>{
-      return this.http.get<FeatureLigneCollection>(this._urlA).pipe(map((obs: { features: any; }) => obs.features));
+    fetchArret():Observable<FeatureArretCollection>{
+      return this.http.get<FeatureArretCollection>(this._urlA).pipe(map((obs: { features: any; }) => obs.features));
   }
 }

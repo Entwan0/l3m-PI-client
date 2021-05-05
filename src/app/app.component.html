@@ -163,6 +163,13 @@
       <!-- fetch des defis ! -->
       <div *ngIf="isAfficheListeDefis">
         <h3> Les defis : </h3>
+
+        <label for="choix_defis" >Choix DEFIS</label>
+        <input list="defis" type="text" id="choix_defis"(change)="afficheLedefis($event)">
+        <datalist id="defis" #lab>
+            <option *ngFor="let leDefis of defis$ | async" [value]="leDefis.id"> {{leDefis.titre}}</option>
+        </datalist>
+
         <table  border="1px solid black">
           <tr>
             <th> ID </th>
@@ -210,20 +217,23 @@
             <button mat-raised-button color="primary" (click)="creerNouveauChamis(login.value,nom.value,prenom.value)">Créer un nouveau chamis</button>
           </form>
         </div>
-      
       <!-- Fin de l'éditeur de chamis -->
 
       <!-- Affiche l'éditeur de défis -->
       <div *ngIf="isAfficheEditDefis">
         <h1>Le defis</h1>
-        
-        <input list="defis" type="text"  id="choix_defis" #lab>
-         <button mat-raised-button color="primary" (click)="getUndefis(lab.value)" >afficher mon défis</button>
-        <datalist id="defis">
-          <option *ngFor="let defis of defis$ | async"  value={{defis.id}} >
-        </datalist>
-              
+
         <form class="formulaire-Chamis-Container">
+              <mat-form-field>
+                <mat-label>Liste De Defis</mat-label>
+                <mat-select #mode>
+                  <mat-option *ngFor="let defis of defis$ | async"  value={{defis}} 
+                  (click)="afficheLedefis(defis)" value={{defis}}
+                  #lab> {{defis.id}}
+                </mat-option>
+                </mat-select>
+              </mat-form-field>
+          <br/>
           <mat-form-field appearance="fill">
             <mat-label>id</mat-label>
             <input matInput type="string" [value]=leDefis.id #id> 
@@ -269,9 +279,12 @@
        <div *ngIf="isAfficheEditArrets">
         <h1>Arret</h1>
         <label for="choix_arrets" >Choix ARRET</label>
-        <input list="arret" type="text" id="choix_arrets">
+        <input list="arret" type="text" id="choix_arrets"  (change)="afficheTagArret($event)" 
+        >
         <datalist id="arret" #lab>
-            <option *ngFor="let arrettag of arretTag$ | async "> {{arrettag.properties.LIBELLE}}</option>
+            <option *ngFor="let arrettag of arretTag$ | async "
+           (ngValue)="arrettag"
+          > {{arrettag.properties.LIBELLE}}</option>
         </datalist>
         
         <form class="formulaire-Chamis-Container">
@@ -295,14 +308,11 @@
               <input matInput type="string" [value]=Arret.code #code> 
             </mat-form-field>
             <br>
-
             <mat-form-field appearance="fill">
               <mat-label>Latitude</mat-label> 
               <input matInput type="string" [value]=Arret.latitude #latitude>
             </mat-form-field>
-
             <br/>
-            
             <mat-form-field appearance="fill">
               <mat-label>Longitude</mat-label>
               <input matInput type="string" [value]=Arret.longitude #longitude> 
@@ -330,7 +340,6 @@
             <button mat-raised-button color="primary" (click)="creerNouveauArret(nomA.value,code.value,latitude.value,longitude.value,nomV.value,streetView.value)">Ajoute Arret</button>
           </form>
         </div>
-      
       <!-- Fin de l'éditeur de L'arret -->  
   
       <!-- Affiche le défis selectionnes sur la carte -->
@@ -350,19 +359,24 @@
                 {{ leDefis.titre }}
               </td>
               <td>
-                {{ leDefis.description }}
+                {{ leDefis.description}}
               </td>
             </tr>
           </table>
       </div>
 
       <!-- question reponse du defis -->
-      <div *ngIf="isVisiteCommence">
-        <div class ="question" *ngIf="isDefisSelectionne">
+      <div *ngIf="isDefisSelectionne" class="formReponseDefis">
+        <div class ="question" *ngIf="isVisiteCommence">
           <h3> La question est la suivante : </h3>
         </div>
 
-        <div class="reponse" *ngIf="isDefisSelectionne">
+        <div class="indice" *ngIf="isVisiteCommence">
+          <h3> Besoin d'un indice ?</h3>
+          <button mat-raised-button color="primary" autocomplete="off">Obtenir un indice</button>
+        </div>
+        <br/>
+        <div class="reponse" *ngIf="isVisiteCommence">
           <h3> Entrer votre reponse :</h3>
           <mat-form-field appearance="fill">
             <mat-label>reponse</mat-label>
@@ -370,7 +384,7 @@
           </mat-form-field>
           <button mat-raised-button color="primary" autocomplete="off">valider ma reponse</button>
         </div>
-    </div>
+      </div>
       
       <!-- Code relatif à la carte -->
       <h1 class="carteTitre"> Voici la carte des défis :</h1>

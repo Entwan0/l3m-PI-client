@@ -5,7 +5,7 @@ import firebase from 'firebase/app';
 import { OSM_TILE_LAYER_URL } from '@yaga/leaflet-ng2';
 import { defis, DefisService } from './defis/defis.service';
 import { Router } from '@angular/router';
-import { LignesService, FeatureLigne, FeatureLigneCollection } from './lignes/lignes.service'
+import { LignesService, FeatureLigne} from './lignes/lignes.service'
 import { arret, ArretService } from './arret/arret.service';
 
 @Component({
@@ -122,6 +122,7 @@ export class AppComponent {
   }
 
   afficheLedefis(id:any){
+    console.log("j'ai recu "+Object.values(id));
     this.isDefisSelectionne = true;
     this.isVisiteCommence = true;
     this.leDefis.id = id.id;
@@ -266,15 +267,14 @@ export class AppComponent {
   rgbToString(ligne: FeatureLigne):string{
     return 'rgb('+ligne.properties.COULEUR+')';
   }
+
   getUndefis(id : string){
     console.log("laaaa" + id);
     this.undefis$ = this.defisservice.recuperUnDefis(id);
     console.log("laaaa" + this.undefis$);
     this.afficheLedefis(this.undefis$);
-
-    }
+  }
    
-  
   getGoogleMapView(lat:string,lng:string){
     console.log("["+lat+","+lng+"]");
     return "https://www.google.com/maps/@" + lat + "," + lng + ",21z";
@@ -284,6 +284,7 @@ export class AppComponent {
     this.isAfficheListeDefis = true;
     this.isVisiteCommence = true;
   }
+  
   method1(){
     console.log("click reussi");
   }

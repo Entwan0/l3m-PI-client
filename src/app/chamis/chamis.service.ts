@@ -49,5 +49,6 @@ export class ChamisService {
       prenom: nPrenom,
     };
     return this.http.put<Chamis>(this.path + newChamis.login,newChamis);
+
   }
 }
