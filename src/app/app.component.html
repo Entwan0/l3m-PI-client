@@ -30,7 +30,7 @@
   </mat-toolbar>
   
   <mat-drawer-container class="example-container">
-    <mat-drawer #drawer [mode]="mode.value">
+    <mat-drawer #drawer>
       <mat-sidenav-container>
         <mat-sidenav>defis</mat-sidenav>
         <mat-sidenav-content (click)="afficheListeDefis()">Afficher la liste des defis</mat-sidenav-content>
@@ -38,6 +38,10 @@
       <mat-sidenav-container>
         <mat-sidenav>chamis</mat-sidenav>
         <mat-sidenav-content (click)="afficheListeChamis()">Afficher la liste des chamis</mat-sidenav-content>
+      </mat-sidenav-container>
+      <mat-sidenav-container>
+        <mat-sidenav>EditeArrets</mat-sidenav>
+        <mat-sidenav-content (click)="afficheLesVisites()">Afficher la liste des visites</mat-sidenav-content>
       </mat-sidenav-container>
       <mat-sidenav-container>
         <mat-sidenav>inscriptionChamis</mat-sidenav>
@@ -55,25 +59,23 @@
         <mat-sidenav>EditeArrets</mat-sidenav>
         <mat-sidenav-content (click)="AfficheEditArrets()">Edit les arrets</mat-sidenav-content>
       </mat-sidenav-container>
+      <mat-sidenav-container>
+        <mat-sidenav>EditeVisites</mat-sidenav>
+        <mat-sidenav-content (click)="AfficheEditVisite()">Edit les visites</mat-sidenav-content>
+      </mat-sidenav-container>
     </mat-drawer>
     <mat-drawer-content>
-      <mat-form-field>
-        <mat-label>Sidenav mode</mat-label>
-        <mat-select #mode value="push">
-          <mat-option value="side">Side</mat-option>
-          <mat-option value="over">Over</mat-option>
-          <mat-option value="push">Push</mat-option>
-        </mat-select>
-      </mat-form-field>
 
       <!-- Debut assistant -->
-      <div class="visiteAccueil">
-        <h1>Pour commencer une visite cliquer sur le bouton si dessous</h1>
-        <button mat-raised-button color="primary" (click)="CommencerVisite()">Commencer une visite</button>
-      </div>
+      <div class="formReponseDefis">
+        <div class="visiteAccueil">
+          <h1>Pour commencer une visite cliquer sur le bouton si dessous</h1>
+          <button mat-raised-button color="primary" (click)="CommencerVisite()">Commencer une visite</button>
+        </div>
 
-      <div class="texteChoisirDefis" *ngIf="isVisiteCommence">
-        <h2>Veuillez choisir un defis, pour cela cliquez sur un defis dans le tableau ou choisissez en un sur la carte</h2>
+        <div class="texteChoisirDefis" *ngIf="isVisiteCommence">
+          <h2>Veuillez choisir un defis, pour cela cliquez sur un defis dans le tableau ou choisissez en un sur la carte</h2>
+        </div>
       </div>
       <!-- Fin assistant -->
 
@@ -83,6 +85,7 @@
             <a class="close" (click)="popupEditDefis = false">&times;</a>
             <div class="content">
             Veuillez fermer l'éditeur de défis avant d'ouvrir autre chose !
+            <button mat-raised-button color="primary" (click)="AfficheEditDefis()">Fermer l'editeur defis</button>
             </div>
         </div>
       </div>
@@ -93,6 +96,7 @@
             <a class="close" (click)="popupEditChamis = false">&times;</a>
             <div class="content">
             Veuillez fermer l'éditeur de chamis avant d'ouvrir autre chose !
+            <button mat-raised-button color="primary" (click)="AfficheEditChamis()">Fermer l'editeur Chamis</button>
             </div>
         </div>
       </div>
@@ -103,6 +107,18 @@
             <a class="close" (click)="popupEditArrets = false">&times;</a>
             <div class="content">
             Veuillez fermer l'éditeur de arrets avant d'ouvrir autre chose !
+            <button mat-raised-button color="primary" (click)="AfficheEditArrets()">Fermer l'editeur arrets</button>
+            </div>
+        </div>
+      </div>
+
+      <div class="overlay" *ngIf="popupEditVisite">
+        <div class="popup">
+            <h2>Vous etes en mode édition de visites !</h2>
+            <a class="close" (click)="popupEditVisite = false">&times;</a>
+            <div class="content">
+              Veuillez fermer l'éditeur de visites avant d'ouvrir autre chose !
+            <button mat-raised-button color="primary" (click)="AfficheEditVisite()">Fermer l'editeur visites</button>
             </div>
         </div>
       </div>
@@ -165,9 +181,10 @@
         <h3> Les defis : </h3>
 
         <label for="choix_defis" >Choix DEFIS</label>
-        <input list="defis" type="text" id="choix_defis"(change)="afficheLedefis($event)">
-        <datalist id="defis" #lab>
-            <option *ngFor="let leDefis of defis$ | async" [value]="leDefis.id"> {{leDefis.titre}}</option>
+        <input  #lab list="defis" type="text" id="choix_defis" (click)="afficheLedefis($event)">
+        <datalist id="defis" >
+            <option  id="defis" *ngFor="let defis of defis$ | async" 
+            (ngModel)="defis" [value]="defis.id" > {{defis.titre}}</option>
         </datalist>
 
         <table  border="1px solid black">
@@ -192,6 +209,35 @@
         <hr />
       </div>
       <!-- Fin du fetch des defis ! -->
+      
+      <!-- fetch des visite ! -->
+      <div  *ngIf="isAfficheListeVisite">  
+        <h3> Visites : </h3>
+      <table  border="1px solid black">
+          <tr>
+            <th> IDVisite </th>
+            <th> IdDefis</th>
+            <th> Nom Visiteur</th>
+            <th> Date de Visite </th>
+            <th> Mode </th>
+            <th> Score </th>
+            <th> Temps </th>
+            <th> Status </th>
+          </tr>
+          <tr *ngFor="let visite of visite$ | async" (click)="afficheLaVisite(visite)">
+            <td> {{visite.idVisite }} </td>
+            <td> {{visite.idDefi}} </td>
+            <td> {{visite.nomVisiteur}} </td>
+            <td> {{visite.dateVisite}} </td>
+            <td> {{visite.mode}} </td>
+            <td> {{visite.score}} </td>
+            <td> {{visite.temps}} </td>
+            <td> {{visite.status}} </td>
+          </tr>
+        </table>
+        <hr />
+      </div>
+      <!-- Fin du fetch des visite ! -->
 
        <!-- Affiche l'éditeur de Chamis -->
        <div *ngIf="isAfficheEditChamis">
@@ -222,7 +268,6 @@
       <!-- Affiche l'éditeur de défis -->
       <div *ngIf="isAfficheEditDefis">
         <h1>Le defis</h1>
-
         <form class="formulaire-Chamis-Container">
               <mat-form-field>
                 <mat-label>Liste De Defis</mat-label>
@@ -251,7 +296,7 @@
           <br/>
           <mat-form-field appearance="fill">
             <mat-label>description</mat-label>
-            <textarea matInput type="string" [value]=leDefis.description #description> </textarea>
+            <textarea matInput type="string" [value]=leDefis.description #description autosize> </textarea>
           </mat-form-field>
           <br/>
           <mat-form-field appearance="fill">
@@ -269,11 +314,98 @@
             <input matInput type="string" [value]=leDefis.longitude #longitude> 
           </mat-form-field>
           <br/>
-          <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value)">Modifier mon défis</button>
-          <button mat-raised-button color="primary" (click)="creerNouveauDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value)">Créer un nouveau défis</button>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Etape</mat-label>
+            <textarea matInput type="string" [value]=leDefis.etapes #etape autosize> </textarea> 
+          </mat-form-field>
+          <br/>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>indice</mat-label>
+            <textarea matInput type="string" [value]=leDefis.indice #indice autosize> </textarea>
+          </mat-form-field>
+          <br/>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>question</mat-label>
+            <textarea matInput type="string" [value]=leDefis.question #question autosize> </textarea>
+          </mat-form-field>
+          <br/>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>reponse</mat-label>
+            <textarea matInput type="string" [value]=leDefis.reponse #reponse autosize> </textarea>
+          </mat-form-field>
+          <br/>
+          <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value,
+          etape.value,indice.value,question.value,reponse.value)">Modifier mon défis</button>
+          <button mat-raised-button color="primary" (click)="creerNouveauDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value,etape.value,indice.value,question.value,reponse.value)">Créer un nouveau défis</button>
         </form>
       </div>
       <!-- Fin de l'éditeur de défis -->
+
+      
+        <!-- Affiche l'éditeur de Visite -->
+        <div *ngIf="isAfficheEditVisite">
+          <h1>La visite</h1>
+          <form class="formulaire-Chamis-Container">
+                <mat-form-field>
+                  <mat-label>Liste des visites</mat-label>
+                  <mat-select #mode>
+                    <mat-option *ngFor="let visite of visite$ | async"  value={{visite}} 
+                    (click)="afficheLaVisite(visite)" value={{visite}}
+                    #lab> {{visite.idVisite}}
+                  </mat-option>
+                  </mat-select>
+                </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>idVisite</mat-label>
+              <input matInput type="string" [value]=laVisite.idVisite #idV> 
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>IdDefi</mat-label>
+              <input matInput type="string" [value]=laVisite.idDefi #idD> 
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="fill">
+              <mat-label>Nom Visiteur</mat-label>
+              <input matInput type="string" [value]=laVisite.nomVisiteur #NomV> 
+            </mat-form-field>
+            <br>
+            <mat-form-field appearance="fill">
+              <mat-label>date de Visite</mat-label>
+              <input matInput type="string" [value]=laVisite.dateVisite #dateVisite> 
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>Mode</mat-label>
+              <input matInput type="string" [value]=laVisite.mode #mode>
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>Score</mat-label>
+              <input matInput type="string" [value]=laVisite.score #score> 
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>Temps</mat-label>
+              <input matInput type="string" [value]=laVisite.temps #temps> 
+            </mat-form-field>
+            <br/>
+            <mat-form-field appearance="fill">
+              <mat-label>Status</mat-label>
+              <input matInput type="string" [value]=laVisite.status #status> 
+            </mat-form-field>
+            <br/>
+           
+            <button class="boutonFormulaire" mat-raised-button color="primary" (click)="saveVisite(idV.value,idD.value,NomV.value,dateVisite.value,mode.value,score.value,temps.value,status.value)"> Sauvgarder la Visite</button>
+            <button mat-raised-button color="primary" (click)="createVisite(idV.value,idD.value,NomV.value,dateVisite.value,mode.value,score.value,temps.value,status.value)">Créer un nouveau défis</button>
+          </form>
+        </div>
+        <!-- Fin de l'éditeur de Visite -->
 
        <!-- Affiche l'éditeur des Arrets -->
        <div *ngIf="isAfficheEditArrets">
@@ -344,45 +476,42 @@
   
       <!-- Affiche le défis selectionnes sur la carte -->
       <div *ngIf="isDefisSelectionne">
-          <h2>Votre défis : </h2>
-          <table  border="1px solid black">
-            <tr>
-              <th> ID </th>
-              <th> Titre </th>
-              <th> descriptionDefis </th>
-            </tr>
-            <tr>
-              <td>
-                {{ leDefis.id }}
-              </td>
-              <td>
-                {{ leDefis.titre }}
-              </td>
-              <td>
-                {{ leDefis.description}}
-              </td>
-            </tr>
-          </table>
+          <h2>Votre défis : 
+          {{ leDefis.etapes}} </h2>
       </div>
 
       <!-- question reponse du defis -->
-      <div *ngIf="isDefisSelectionne" class="formReponseDefis">
-        <div class ="question" *ngIf="isVisiteCommence">
-          <h3> La question est la suivante : </h3>
-        </div>
+      <div *ngIf="isVisiteCommence">
+        <div *ngIf="isDefisSelectionne" class="formReponseDefis">
+          <div class="point" *ngIf="!isIndice">
+            <h1>Cette question rapporte {{ point }} points !</h1>
+          </div>
 
-        <div class="indice" *ngIf="isVisiteCommence">
-          <h3> Besoin d'un indice ?</h3>
-          <button mat-raised-button color="primary" autocomplete="off">Obtenir un indice</button>
-        </div>
-        <br/>
-        <div class="reponse" *ngIf="isVisiteCommence">
-          <h3> Entrer votre reponse :</h3>
-          <mat-form-field appearance="fill">
-            <mat-label>reponse</mat-label>
-            <input matInput type="string" #reponse> 
-          </mat-form-field>
-          <button mat-raised-button color="primary" autocomplete="off">valider ma reponse</button>
+          <div class="point" *ngIf="isIndice">
+            <h1>Vous avez pris un indice cela ne vous rapporte  plus que {{ point }} points !</h1>
+          </div>
+
+          <div class ="question">
+            <h3> La question est la suivante : </h3>
+            <h2>{{ leDefis.question }}</h2>
+          </div>
+
+          <div class="indice">
+            <h3> Besoin d'un indice ?</h3>
+            <button mat-raised-button color="primary" autocomplete="off" (click)="afficheIndice()">Obtenir un indice</button>
+            <div *ngIf="isIndice"> 
+              <h2>{{ leDefis.indice }} </h2>
+            </div>
+          </div>
+          <br/>
+          <div class="reponse">
+            <h3> Entrer votre reponse :</h3>
+            <mat-form-field appearance="fill">
+              <mat-label>reponse</mat-label>
+              <input matInput type="string" #reponse> 
+            </mat-form-field>
+            <button mat-raised-button color="primary" autocomplete="off" (click)="valideReponse(reponse.value)">valider ma reponse</button>
+          </div>
         </div>
       </div>
       

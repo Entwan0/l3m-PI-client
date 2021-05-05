@@ -20,6 +20,9 @@ import { LignesService } from './lignes/lignes.service';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ArretService } from './arret/arret.service';
+import { VisitesService } from './visite/visite.service';
+import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
+
 @NgModule({
   declarations: [
     AppComponent
@@ -30,7 +33,7 @@ import { ArretService } from './arret/arret.service';
     BrowserAnimationsModule,
     MatToolbarModule,
     MatIconModule,
-      MatButtonModule,
+    MatButtonModule,
     MatSidenavModule,
     MatInputModule,
     MatSelectModule,
@@ -40,8 +43,9 @@ import { ArretService } from './arret/arret.service';
     AngularFireModule.initializeApp(environment.firebase),
     HttpClientModule,
     NgbModule,
+    TextareaAutosizeModule,
   ],
-  providers: [ ChamisService,DefisService, LignesService, ArretService],
+  providers: [ ChamisService,DefisService, LignesService, ArretService,VisitesService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

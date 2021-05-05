@@ -10,6 +10,10 @@ export interface defis {
     loginAuteur:string;
     latitude:string;
     longitude:string;
+    etapes : string;
+    indice : string;
+    question: string;
+    reponse : string;
 }
 
 @Injectable()
@@ -35,12 +39,16 @@ export class DefisService{
             description: "",
             loginAuteur: "",
             latitude: "",
-            longitude: ""
-        }
+            longitude: "",
+            etapes : "",
+            indice : "",
+            question : "",
+            reponse : ""
+                }
         return leDefis;
     }
 
-    updateDefis(nId: string, nTitre: string, nDate: any, nDescription: string, nLoginAuteur: string, nLatitude: string, nLongitude: string):Observable<defis> {
+    updateDefis(nId: string, nTitre: string, nDate: any, nDescription: string, nLoginAuteur: string, nLatitude: string, nLongitude: string, nEtapes:string, nIndice : string, nQuestion : string, nReponse : string):Observable<defis> {
         let newDefis:defis = {
             id:nId,
             titre:nTitre,
@@ -48,13 +56,17 @@ export class DefisService{
             description:nDescription,
             loginAuteur:nLoginAuteur,
             latitude:nLatitude,
-            longitude:nLongitude
+            longitude:nLongitude,
+            etapes : nEtapes,
+            indice : nIndice,
+            question : nQuestion,
+            reponse : nReponse 
         };
     console.log("id /" + newDefis.id + "/ titre /" + newDefis.titre + "/ date /" + newDefis.dateDeCreation + "/ description /" + newDefis.description + "/ login auteur /" + newDefis.loginAuteur + "/ latitude /" + newDefis.latitude + "/ longitude /" + newDefis.longitude);
     return this.http.put<defis>(this._url+newDefis.id,newDefis);
     }
 
-    postDefis(nId: string, nTitre: string, nDate: any, nDescription:string, nLoginAuteur:string, nLatitude:string, nLongitude:string): Observable<defis> {
+    postDefis(nId: string, nTitre: string, nDate: any, nDescription:string, nLoginAuteur:string, nLatitude:string, nLongitude:string, nEtapes:string, nIndice : string, nQuestion : string, nReponse : string): Observable<defis> {
         const newDefis:defis = {
             id:nId,
             titre:nTitre,
@@ -62,7 +74,11 @@ export class DefisService{
             description:nDescription,
             loginAuteur:nLoginAuteur,
             latitude:nLatitude,
-            longitude:nLongitude
+            longitude:nLongitude,
+            etapes : nEtapes,
+            indice : nIndice,
+            question : nQuestion,
+            reponse : nReponse 
         };
         
         console.log("la latitude : " + newDefis.latitude + " et la longitude : " + newDefis.longitude);
