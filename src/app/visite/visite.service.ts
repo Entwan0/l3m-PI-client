@@ -4,9 +4,9 @@ import { Observable } from 'rxjs';
 
 export interface visites {
   idVisite : string;
-  idDefi : string;
+  idDefis : string;
   nomVisiteur : string;
-  dateVisite : Date;
+  dateVisite : String;
   mode : string;
   score : string;
   temps : string; 
@@ -18,50 +18,54 @@ export class VisitesService {
   private _url: string = "http://localhost:5000/api/visites/"
  
   constructor(private http:HttpClient) { 
-    }
+  }
 
-fetchVisites():Observable<visites>{
-      return this.http.get<visites>(this._url);
+  fetchVisites():Observable<visites>{
+    return this.http.get<visites>(this._url);
   }
 
   recuperUneVisite(nomVisiteur:string):Observable<visites>{
     return this.http.get<visites>(this._url+nomVisiteur);
-}
-
-
-initializeNouvelleVisite():visites{
-  let laVisite : visites = {
-      idVisite: "",
-      idDefi: "",
-      nomVisiteur: "",
-      dateVisite: new Date('01-01-0000'),
-      mode: "",
-      score: "",
-      temps: "",
-      status: ""
-  }
-  return laVisite;
-}
-
-updateVisite(nIdVisite: string, nIdDefi: string, nNomVisiteur: any, nDateVisite: Date, nMode: string, nScore: string, nTemps: string, nStatus: string):Observable<visites> {
-  let newVisites:visites = {
-    idVisite: nIdVisite,
-    idDefi: nIdDefi,
-    nomVisiteur: nNomVisiteur,
-    dateVisite: nDateVisite,
-    mode: nMode,
-    score: nScore,
-    temps: nTemps,
-    status: nStatus
-  };
-  console.log("id de visite /" + newVisites.idVisite + "/ id du defi /" + newVisites.idDefi + "/ nom du visiteur /" + newVisites.nomVisiteur + "/ date de la visite /" + newVisites.dateVisite + "/ mode de la visite /" + newVisites.mode + "/ score /" + newVisites.score + "/ temps de visite /" + newVisites.temps + "/ status de la visite /" + newVisites.status);
-  return this.http.put<visites>(this._url + newVisites.idVisite,newVisites);
   }
 
-  postVisite(nIdVisite: string, nIdDefi: string, nNomVisiteur: any, nDateVisite: Date, nMode: string, nScore: string, nTemps: string, nStatus: string):Observable<visites>  {
+
+  initializeNouvelleVisite():visites{
+    let laVisite : visites = {
+        idVisite: "",
+        idDefis: "",
+        nomVisiteur: "",
+        dateVisite: '01-01-0000',
+        mode: "",
+        score: "",
+        temps: "",
+        status: ""
+    }
+    return laVisite;
+  }
+
+  updateVisite(nIdVisite: string, nIdDefi: string, nNomVisiteur: any, nDateVisite: String, nMode: string, nScore: string, nTemps: string, nStatus: string):Observable<visites> {
+    let newVisites:visites = {
+      idVisite: nIdVisite,
+      idDefis: nIdDefi,
+      nomVisiteur: nNomVisiteur,
+      dateVisite: nDateVisite,
+      mode: nMode,
+      score: nScore,
+      temps: nTemps,
+      status: nStatus
+    };
+    console.log("id de visite /" + newVisites.idVisite + "/ id du defi /" + newVisites.idDefis + "/ nom du visiteur /" + newVisites.nomVisiteur + "/ date de la visite /" + newVisites.dateVisite + "/ mode de la visite /" + newVisites.mode + "/ score /" + newVisites.score + "/ temps de visite /" + newVisites.temps + "/ status de la visite /" + newVisites.status);
+    return this.http.put<visites>(this._url + newVisites.idVisite,newVisites);
+  }
+
+  RecuperUneVisite(login: string): Observable<visites> {
+    return this.http.get<visites>(login);
+  }
+
+  postVisite(nIdVisite: string, nIdDefi: string, nNomVisiteur: string, nDateVisite: String, nMode: string, nScore: string, nTemps: string, nStatus: string):Observable<visites>  {
     const newVisites:visites = {
       idVisite: nIdVisite,
-      idDefi: nIdDefi,
+      idDefis: nIdDefi,
       nomVisiteur: nNomVisiteur,
       dateVisite: nDateVisite,
       mode: nMode,

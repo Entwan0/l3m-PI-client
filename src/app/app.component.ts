@@ -50,8 +50,11 @@ export class AppComponent {
   popupEditArrets:boolean;
   popupEditVisite:boolean;
   point:number;
+  email:string;
   coutIndice:number;
   @Output() currentitem = new EventEmitter<defis>();
+  reponseTrouve:number;
+  idVisite:string;
 
   constructor(public auth: AngularFireAuth,private visiteService : VisitesService,private arretService : ArretService,private chamisService:ChamisService, private defisservice: DefisService,private router: Router, private lignesService:LignesService) {
     this.tousLeschamis$ = this.chamisService.RecupereTousLesChamis();
@@ -77,12 +80,15 @@ export class AppComponent {
     this.isAfficheListeVisite = false;
     this.isAfficheEditVisite = false;
     this.isIndice = false;
+    this.email = "visiteur";
+    this.reponseTrouve = 0;
     this.point = 10;
     this.coutIndice = 5;
+    this.idVisite = "";
     this.leDefis = this.defisservice.initializeNouveauDefis();
     this.leChamis = this.chamisService.initializeNouveauChamis();
     this.Arret = this.arretService.initializeNouveauArrets();
-    this.laVisite=this.visiteService.initializeNouvelleVisite();
+    this.laVisite = this.visiteService.initializeNouvelleVisite();
   }
   
   login(): void {
@@ -163,7 +169,7 @@ export class AppComponent {
 
   afficheLaVisite(id:any){
     this.laVisite.idVisite = id.idVisite;
-    this.laVisite.idDefi = id.idDefi;
+    this.laVisite.idDefis = id.idDefis;
     this.laVisite.nomVisiteur = id.nomVisiteur;
     this.laVisite.dateVisite = id.dateVisite;
     this.laVisite.mode = id.mode;
@@ -171,6 +177,7 @@ export class AppComponent {
     this.laVisite.temps = id.temps;
     this.laVisite.status = id.status;
   }
+
   /*
   * Change valeur du boolean, si boolean = vrai alors le rend faux. Si boolean est faux alors le rend vrai.
   */
@@ -309,7 +316,7 @@ export class AppComponent {
     return 'rgb('+ligne.properties.COULEUR+')';
   }
 
-  saveVisite(IdVisite: string, IdDefi: string, NomVisiteur: string, DateVisite: any, Mode: string, Score: string, Temps: string, Status: string){
+  updateVisite(IdVisite: string, IdDefi: string, NomVisiteur: string, DateVisite: any, Mode: string, Score: string, Temps: string, Status: string){
     this.visiteService.updateVisite(IdVisite, IdDefi, NomVisiteur, DateVisite, Mode, Score, Temps, Status).subscribe(
         (response) => {
           console.log("la sauvgarde à fonctionnée avec la valeur : " + response);
@@ -317,19 +324,19 @@ export class AppComponent {
         (error) => {
           console.error("Erreur sur le put : " + error);
         }
-      );
-    }
+    );
+  }
   
-    createVisite(nIdVisite: string, nIdDefi: string, nNomVisiteur: string, nDateVisite: any, nMode: string, nScore: string, nTemps: string, nStatus: string){
-      this.visiteService.postVisite(nIdVisite, nIdDefi, nNomVisiteur, nDateVisite, nMode, nScore, nTemps, nStatus).subscribe(
-      (response) => {
-        console.log("la création à fonctionnée avec la valeur : " + response);
-      },
-      (error) => {
-        console.error("Erreur sur le put : " + error);
-      }
-      );
+  createVisite(nIdVisite: string, nIdDefi: string, nNomVisiteur: string, nDateVisite: any, nMode: string, nScore: string, nTemps: string, nStatus: string){
+    this.visiteService.postVisite(nIdVisite, nIdDefi, nNomVisiteur, nDateVisite, nMode, nScore, nTemps, nStatus).subscribe(
+    (response) => {
+      console.log("la création à fonctionnée avec la valeur : " + response);
+    },
+    (error) => {
+      console.error("Erreur sur le put : " + error);
     }
+    );
+  }
 
    
   getUndefis(id : string):void{
@@ -352,7 +359,44 @@ export class AppComponent {
     this.isIndice = true;
   }
 
-  valideReponse(reponse:string):void{
+  valideReponseVisiteur(reponse:string):void{
+    if(reponse === this.leDefis.reponse)this.reponseTrouve = 2;
+    else this.reponseTrouve = 1;
+    this.insertPartieDansVisite(this.reponseTrouve);
+  }
 
+  valideReponseConnecte(reponse:string,login:any):void{
+    if(reponse === this.leDefis.reponse)this.reponseTrouve = 2;
+    else this.reponseTrouve = 1;
+    this.email = login;
+    this.insertPartieDansVisite(this.reponseTrouve);
+  }
+
+  insertPartieDansVisite(reponse:number):void{
+    let msgVictoire:string = "";
+    if(this.reponseTrouve === 1) msgVictoire = "Abandon";
+    else msgVictoire = "Répondu";
+
+    if(this.idVisite === ""){
+      this.idVisite = "V1000";
+      this.visiteService.postVisite(this.idVisite,this.leDefis.id,this.email,"2020-05-06","distanciel",this.point.toString(),"0",msgVictoire).subscribe(
+        (response) => {
+          console.log("la création à fonctionnée avec la valeur : " + response);
+        },
+        (error) => {
+          console.error("Erreur sur le put : " + error);
+        }
+      );
+    }
+    else {
+      this.visiteService.updateVisite(this.idVisite,this.leDefis.id,this.email,"2020-05-06","distanciel",this.point.toString(),"0",msgVictoire).subscribe(
+        (response) => {
+          console.log("la création à fonctionnée avec la valeur : " + response);
+        },
+        (error) => {
+          console.error("Erreur sur le put : " + error);
+        }
+      );
+    }
   }
 }

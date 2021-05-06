@@ -26,10 +26,9 @@ export class DefisService{
         return this.http.get<defis>(this._url);
     }
 
-    recuperUnDefis(id:string):Observable<defis>{
+    public recuperUnDefis(id:string):Observable<defis>{
         return this.http.get<defis>(this._url+id);
     }
-   
 
     initializeNouveauDefis():defis{
         let leDefis:defis = {
@@ -44,7 +43,7 @@ export class DefisService{
             indice : "",
             question : "",
             reponse : ""
-                }
+        }
         return leDefis;
     }
 
@@ -62,7 +61,6 @@ export class DefisService{
             question : nQuestion,
             reponse : nReponse 
         };
-    console.log("id /" + newDefis.id + "/ titre /" + newDefis.titre + "/ date /" + newDefis.dateDeCreation + "/ description /" + newDefis.description + "/ login auteur /" + newDefis.loginAuteur + "/ latitude /" + newDefis.latitude + "/ longitude /" + newDefis.longitude);
     return this.http.put<defis>(this._url+newDefis.id,newDefis);
     }
 
@@ -80,11 +78,9 @@ export class DefisService{
             question : nQuestion,
             reponse : nReponse 
         };
-        
-        console.log("la latitude : " + newDefis.latitude + " et la longitude : " + newDefis.longitude);
         return this.http.post<defis>(
           this._url + nId,
           newDefis
         );
-      }
+    }
 }

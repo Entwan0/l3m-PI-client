@@ -27,7 +27,7 @@ export class ChamisService {
   }
 
   RecuperUnChamis(login: string): Observable<Chamis> {
-    return this.http.get<Chamis>(this.path);
+    return this.http.get<Chamis>(login);
   }
 
   postChamis(loginGoogle: string,nomChoisi: string,prenomChoisi: string): Observable<Chamis> {

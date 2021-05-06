@@ -186,7 +186,6 @@
             <option  id="defis" *ngFor="let defis of defis$ | async" 
             (ngModel)="defis" [value]="defis.id" > {{defis.titre}}</option>
         </datalist>
-
         <table  border="1px solid black">
           <tr>
             <th> ID </th>
@@ -226,7 +225,7 @@
           </tr>
           <tr *ngFor="let visite of visite$ | async" (click)="afficheLaVisite(visite)">
             <td> {{visite.idVisite }} </td>
-            <td> {{visite.idDefi}} </td>
+            <td> {{visite.idDefis}} </td>
             <td> {{visite.nomVisiteur}} </td>
             <td> {{visite.dateVisite}} </td>
             <td> {{visite.mode}} </td>
@@ -345,67 +344,66 @@
       </div>
       <!-- Fin de l'éditeur de défis -->
 
-      
-        <!-- Affiche l'éditeur de Visite -->
-        <div *ngIf="isAfficheEditVisite">
-          <h1>La visite</h1>
-          <form class="formulaire-Chamis-Container">
-                <mat-form-field>
-                  <mat-label>Liste des visites</mat-label>
-                  <mat-select #mode>
-                    <mat-option *ngFor="let visite of visite$ | async"  value={{visite}} 
-                    (click)="afficheLaVisite(visite)" value={{visite}}
-                    #lab> {{visite.idVisite}}
-                  </mat-option>
-                  </mat-select>
-                </mat-form-field>
-            <br/>
-            <mat-form-field appearance="fill">
-              <mat-label>idVisite</mat-label>
-              <input matInput type="string" [value]=laVisite.idVisite #idV> 
-            </mat-form-field>
-            <br/>
-            <mat-form-field appearance="fill">
-              <mat-label>IdDefi</mat-label>
-              <input matInput type="string" [value]=laVisite.idDefi #idD> 
-            </mat-form-field>
-            <br>
-            <mat-form-field appearance="fill">
-              <mat-label>Nom Visiteur</mat-label>
-              <input matInput type="string" [value]=laVisite.nomVisiteur #NomV> 
-            </mat-form-field>
-            <br>
-            <mat-form-field appearance="fill">
-              <mat-label>date de Visite</mat-label>
-              <input matInput type="string" [value]=laVisite.dateVisite #dateVisite> 
-            </mat-form-field>
-            <br/>
-            <mat-form-field appearance="fill">
-              <mat-label>Mode</mat-label>
-              <input matInput type="string" [value]=laVisite.mode #mode>
-            </mat-form-field>
-            <br/>
-            <mat-form-field appearance="fill">
-              <mat-label>Score</mat-label>
-              <input matInput type="string" [value]=laVisite.score #score> 
-            </mat-form-field>
-            <br/>
-            <mat-form-field appearance="fill">
-              <mat-label>Temps</mat-label>
-              <input matInput type="string" [value]=laVisite.temps #temps> 
-            </mat-form-field>
-            <br/>
-            <mat-form-field appearance="fill">
-              <mat-label>Status</mat-label>
-              <input matInput type="string" [value]=laVisite.status #status> 
-            </mat-form-field>
-            <br/>
-           
-            <button class="boutonFormulaire" mat-raised-button color="primary" (click)="saveVisite(idV.value,idD.value,NomV.value,dateVisite.value,mode.value,score.value,temps.value,status.value)"> Sauvgarder la Visite</button>
-            <button mat-raised-button color="primary" (click)="createVisite(idV.value,idD.value,NomV.value,dateVisite.value,mode.value,score.value,temps.value,status.value)">Créer un nouveau défis</button>
-          </form>
+      <!-- Affiche l'éditeur de Visite -->
+      <div *ngIf="isAfficheEditVisite">
+        <h1>La visite</h1>
+        <div class="formulaire-Chamis-Container">
+              <mat-form-field>
+                <mat-label>Liste des visites</mat-label>
+                <mat-select #mode>
+                  <mat-option *ngFor="let visite of visite$ | async"  value={{visite}} 
+                  (click)="afficheLaVisite(visite)" value={{visite}}
+                  #lab> {{visite.idVisite}}
+                </mat-option>
+                </mat-select>
+              </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>idVisite</mat-label>
+            <input matInput type="string" [value]=laVisite.idVisite #idV> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>IdDefi</mat-label>
+            <input matInput type="string" [value]=laVisite.idDefis #idD> 
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>Nom Visiteur</mat-label>
+            <input matInput type="string" [value]=laVisite.nomVisiteur #NomV> 
+          </mat-form-field>
+          <br>
+          <mat-form-field appearance="fill">
+            <mat-label>date de Visite</mat-label>
+            <input matInput type="string" [value]=laVisite.dateVisite #dateVisite> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Mode</mat-label>
+            <input matInput type="string" [value]=laVisite.mode #mode>
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Score</mat-label>
+            <input matInput type="string" [value]=laVisite.score #score> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Temps</mat-label>
+            <input matInput type="string" [value]=laVisite.temps #temps> 
+          </mat-form-field>
+          <br/>
+          <mat-form-field appearance="fill">
+            <mat-label>Status</mat-label>
+            <input matInput type="string" [value]=laVisite.status #status> 
+          </mat-form-field>
+          <br/>
+          
+          <button class="boutonFormulaire" mat-raised-button color="primary" (click)="updateVisite(idV.value,idD.value,NomV.value,dateVisite.value,mode.value,score.value,temps.value,status.value)"> Sauvgarder la Visite</button>
+          <button mat-raised-button color="primary" (click)="createVisite(idV.value,idD.value,NomV.value,dateVisite.value,mode.value,score.value,temps.value,status.value)">Créer un nouveau défis</button>
         </div>
-        <!-- Fin de l'éditeur de Visite -->
+      </div>
+      <!-- Fin de l'éditeur de Visite -->
 
        <!-- Affiche l'éditeur des Arrets -->
        <div *ngIf="isAfficheEditArrets">
@@ -505,12 +503,20 @@
           </div>
           <br/>
           <div class="reponse">
-            <h3> Entrer votre reponse :</h3>
+            <h3> Entrer votre réponse :</h3>
             <mat-form-field appearance="fill">
-              <mat-label>reponse</mat-label>
+              <mat-label>réponse</mat-label>
               <input matInput type="string" #reponse> 
             </mat-form-field>
-            <button mat-raised-button color="primary" autocomplete="off" (click)="valideReponse(reponse.value)">valider ma reponse</button>
+            <div *ngIf="auth.user | async as user">
+              <button mat-raised-button color="primary" autocomplete="off" (click)="valideReponseConnecte(reponse.value,user.email)">valider ma reponse</button>
+            </div>
+            <div *ngIf="(auth.user | async) === null">
+              <button mat-raised-button color="primary" autocomplete="off" (click)="valideReponseVisiteur(reponse.value)">valider ma reponse</button>
+            </div>
+            
+            <h2 *ngIf="reponseTrouve===1"> Mauvaise réponse !</h2>
+            <h2 *ngIf="reponseTrouve===2"> Bonne réponse !</h2>
           </div>
         </div>
       </div>
