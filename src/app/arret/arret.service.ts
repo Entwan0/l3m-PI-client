@@ -13,8 +13,8 @@ export interface arret {
 
 @Injectable()
 export class ArretService {
-    private _url: string = "https://projet-integrateur.herokuapp.com/api/arrets/"
-    //private _url: string = "http://localhost:5000/api/arrets/"
+    private _url: string = "https://projet-integrateur.herokuapp.com/api/arrets/";
+    
     constructor(private http:HttpClient ){
     }
 

@@ -20,7 +20,7 @@ export interface defis {
 export class DefisService{
     private _url: string = "https://projet-integrateur.herokuapp.com/api/defis/"
     //private _url: string = "http://localhost:5000/api/defis/"
-    
+
     constructor(private http:HttpClient) { 
     }
 

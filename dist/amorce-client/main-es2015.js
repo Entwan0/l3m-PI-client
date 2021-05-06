@@ -27,9 +27,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class ArretService {
+    //private _url: string = "http://localhost:5000/api/arrets/"
     constructor(http) {
         this.http = http;
-        this._url = "http://localhost:5000/api/arrets/";
+        this._url = "https://projet-integrateur.herokuapp.com/api/arrets/";
     }
     RecupereTousLesArrets() {
         return this.http.get(this._url);
@@ -1409,8 +1410,8 @@ class AppComponent {
         return result;
     }
     AfficheEditDefis() {
-        this.isAfficheListeDefis = !this.isAfficheListeDefis;
         this.isAfficheEditDefis = !this.isAfficheEditDefis;
+        this.isAfficheListeDefis = this.isAfficheEditDefis;
         this.isAfficheListeChamis = false;
         this.isSincrireChamis = false;
         this.isAfficheEditChamis = false;
@@ -1418,8 +1419,8 @@ class AppComponent {
         this.isAfficheEditVisite = false;
     }
     AfficheEditChamis() {
-        this.isAfficheListeChamis = !this.isAfficheListeChamis;
         this.isAfficheEditChamis = !this.isAfficheEditChamis;
+        this.isAfficheListeChamis = this.isAfficheEditChamis;
         this.isAfficheListeDefis = false;
         this.isSincrireChamis = false;
         this.isAfficheEditDefis = false;
@@ -1438,7 +1439,7 @@ class AppComponent {
     }
     AfficheEditVisite() {
         this.isAfficheEditVisite = !this.isAfficheEditVisite;
-        this.isAfficheListeVisite = !this.isAfficheListeVisite;
+        this.isAfficheListeVisite = this.isAfficheEditVisite;
         this.isAfficheListeDefis = false;
         this.isAfficheListeChamis = false;
         this.isSincrireChamis = false;
@@ -1769,9 +1770,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class ChamisService {
+    //private path = "http://localhost:5000/api/users/";
     constructor(http) {
         this.http = http;
-        this.path = "http://localhost:5000/api/users/";
+        this.path = "https://projet-integrateur.herokuapp.com/api/users/";
     }
     initializeNouveauChamis() {
         let leChamis = {
@@ -1927,7 +1929,7 @@ __webpack_require__.r(__webpack_exports__);
 class DefisService {
     constructor(http) {
         this.http = http;
-        this._url = "http://localhost:5000/api/defis/";
+        this._url = "https://projet-integrateur.herokuapp.com/api/defis/";
     }
     fetchDefis() {
         return this.http.get(this._url);
@@ -2005,9 +2007,10 @@ __webpack_require__.r(__webpack_exports__);
 
 
 class VisitesService {
+    //private _url: string = "http://localhost:5000/api/visites/"
     constructor(http) {
         this.http = http;
-        this._url = "http://localhost:5000/api/visites/";
+        this._url = "https://projet-integrateur.herokuapp.com/api/visites/";
     }
     fetchVisites() {
         return this.http.get(this._url);

@@ -55,11 +55,12 @@
       "tk/3");
 
       var ArretService = /*#__PURE__*/function () {
+        //private _url: string = "http://localhost:5000/api/arrets/"
         function ArretService(http) {
           _classCallCheck(this, ArretService);
 
           this.http = http;
-          this._url = "http://localhost:5000/api/arrets/";
+          this._url = "https://projet-integrateur.herokuapp.com/api/arrets/";
         }
 
         _createClass(ArretService, [{
@@ -2993,8 +2994,8 @@
         }, {
           key: "AfficheEditDefis",
           value: function AfficheEditDefis() {
-            this.isAfficheListeDefis = !this.isAfficheListeDefis;
             this.isAfficheEditDefis = !this.isAfficheEditDefis;
+            this.isAfficheListeDefis = this.isAfficheEditDefis;
             this.isAfficheListeChamis = false;
             this.isSincrireChamis = false;
             this.isAfficheEditChamis = false;
@@ -3004,8 +3005,8 @@
         }, {
           key: "AfficheEditChamis",
           value: function AfficheEditChamis() {
-            this.isAfficheListeChamis = !this.isAfficheListeChamis;
             this.isAfficheEditChamis = !this.isAfficheEditChamis;
+            this.isAfficheListeChamis = this.isAfficheEditChamis;
             this.isAfficheListeDefis = false;
             this.isSincrireChamis = false;
             this.isAfficheEditDefis = false;
@@ -3028,7 +3029,7 @@
           key: "AfficheEditVisite",
           value: function AfficheEditVisite() {
             this.isAfficheEditVisite = !this.isAfficheEditVisite;
-            this.isAfficheListeVisite = !this.isAfficheListeVisite;
+            this.isAfficheListeVisite = this.isAfficheEditVisite;
             this.isAfficheListeDefis = false;
             this.isAfficheListeChamis = false;
             this.isSincrireChamis = false;
@@ -3653,11 +3654,12 @@
       "tk/3");
 
       var ChamisService = /*#__PURE__*/function () {
+        //private path = "http://localhost:5000/api/users/";
         function ChamisService(http) {
           _classCallCheck(this, ChamisService);
 
           this.http = http;
-          this.path = "http://localhost:5000/api/users/";
+          this.path = "https://projet-integrateur.herokuapp.com/api/users/";
         }
 
         _createClass(ChamisService, [{
@@ -3948,7 +3950,7 @@
           _classCallCheck(this, DefisService);
 
           this.http = http;
-          this._url = "http://localhost:5000/api/defis/";
+          this._url = "https://projet-integrateur.herokuapp.com/api/defis/";
         }
 
         _createClass(DefisService, [{
@@ -4064,11 +4066,12 @@
       "tk/3");
 
       var VisitesService = /*#__PURE__*/function () {
+        //private _url: string = "http://localhost:5000/api/visites/"
         function VisitesService(http) {
           _classCallCheck(this, VisitesService);
 
           this.http = http;
-          this._url = "http://localhost:5000/api/visites/";
+          this._url = "https://projet-integrateur.herokuapp.com/api/visites/";
         }
 
         _createClass(VisitesService, [{
