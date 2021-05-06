@@ -238,8 +238,8 @@ export class AppComponent {
   }
 
   AfficheEditDefis():void{
-    this.isAfficheListeDefis = !this.isAfficheListeDefis;
     this.isAfficheEditDefis = !this.isAfficheEditDefis;
+    this.isAfficheListeDefis = this.isAfficheEditDefis;
     this.isAfficheListeChamis = false;
     this.isSincrireChamis = false;
     this.isAfficheEditChamis = false;
@@ -248,8 +248,8 @@ export class AppComponent {
   }
 
   AfficheEditChamis():void{
-    this.isAfficheListeChamis = !this.isAfficheListeChamis;
     this.isAfficheEditChamis = !this.isAfficheEditChamis;
+    this.isAfficheListeChamis = this.isAfficheEditChamis;
     this.isAfficheListeDefis = false;
     this.isSincrireChamis = false;
     this.isAfficheEditDefis = false;
@@ -270,7 +270,7 @@ export class AppComponent {
 
   AfficheEditVisite():void{
     this.isAfficheEditVisite = !this.isAfficheEditVisite;
-    this.isAfficheListeVisite = !this.isAfficheListeVisite;
+    this.isAfficheListeVisite =  this.isAfficheEditVisite;
     this.isAfficheListeDefis = false;
     this.isAfficheListeChamis = false;
     this.isSincrireChamis = false;

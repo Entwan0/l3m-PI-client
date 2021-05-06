@@ -15,7 +15,8 @@ export interface visites {
 
 @Injectable()
 export class VisitesService {
-  private _url: string = "http://localhost:5000/api/visites/"
+  private _url: string = "https://projet-integrateur.herokuapp.com/api/visites/"
+  //private _url: string = "http://localhost:5000/api/visites/"
  
   constructor(private http:HttpClient) { 
   }

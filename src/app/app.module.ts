@@ -11,7 +11,7 @@ import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {MatMenuModule} from '@angular/material/menu';
 import { YagaModule } from '@yaga/leaflet-ng2';
-import { environment } from 'src/environments/environment';
+import { firebase } from 'src/environments/environment';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { ChamisService } from './chamis/chamis.service';
@@ -40,7 +40,7 @@ import { TextareaAutosizeModule } from 'ngx-textarea-autosize';
     MatMenuModule,
     YagaModule,
     AngularFireAuthModule,
-    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireModule.initializeApp(firebase),
     HttpClientModule,
     NgbModule,
     TextareaAutosizeModule,
