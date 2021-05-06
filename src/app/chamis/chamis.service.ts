@@ -11,6 +11,7 @@ export interface Chamis {
 @Injectable()
 export class ChamisService {
   private path = "https://projet-integrateur.herokuapp.com/api/users/";
+  //private _url: string = "http://localhost:5000/api/users/"
   
   constructor(private http: HttpClient) {}
 

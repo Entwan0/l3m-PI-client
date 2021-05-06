@@ -138,6 +138,7 @@ export class AppComponent {
 
   afficheLedefis(id:any){
     this.isDefisSelectionne = true;
+    this.idVisite = "";
     this.leDefis.id = id.id;
     this.leDefis.titre = id.titre;
     this.leDefis.dateDeCreation = id.dateDeCreation;
@@ -378,7 +379,10 @@ export class AppComponent {
     else msgVictoire = "Répondu";
 
     if(this.idVisite === ""){
-      this.idVisite = "V1000";
+      let randomNombre:string = Math.random().toString(36).substring(7);
+      let randomLettre:string = Math.floor(Math.random() * 10000).toString();
+      this.idVisite = randomLettre + randomNombre;
+      console.log("random", this.idVisite);
       this.visiteService.postVisite(this.idVisite,this.leDefis.id,this.email,"2020-05-06","distanciel",this.point.toString(),"0",msgVictoire).subscribe(
         (response) => {
           console.log("la création à fonctionnée avec la valeur : " + response);
