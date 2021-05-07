@@ -267,7 +267,7 @@
       <!-- Affiche l'éditeur de défis -->
       <div *ngIf="isAfficheEditDefis">
         <h1>Le defis</h1>
-        <div class="formulaire-Chamis-Container">
+        <form class="formulaire-Chamis-Container">
               <mat-form-field>
                 <mat-label>Liste De Defis</mat-label>
                 <mat-select #mode>
@@ -340,7 +340,7 @@
           <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value,
           etape.value,indice.value,question.value,reponse.value)">Modifier mon défis</button>
           <button mat-raised-button color="primary" (click)="creerNouveauDefis(id.value,titre.value,dateCreation.value,description.value,longinAuteur.value,latitude.value,longitude.value,etape.value,indice.value,question.value,reponse.value)">Créer un nouveau défis</button>
-        </div>
+        </form>
       </div>
       <!-- Fin de l'éditeur de défis -->
 
@@ -466,7 +466,7 @@
             </mat-form-field>
             <br/>
             <br/>
-            <button mat-raised-button color="primary" (click)="modifieArret(nomA.value,code.value,latitude.value,longitude.value,nomV.value,streetView.value)">Modifier Arret</button>
+            <button class="boutonFormulaire" mat-raised-button color="primary" (click)="modifieArret(nomA.value,code.value,latitude.value,longitude.value,nomV.value,streetView.value)">Modifier Arret</button>
             <button mat-raised-button color="primary" (click)="creerNouveauArret(nomA.value,code.value,latitude.value,longitude.value,nomV.value,streetView.value)">Ajoute Arret</button>
           </form>
         </div>
