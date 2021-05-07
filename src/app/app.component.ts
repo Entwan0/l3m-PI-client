@@ -139,6 +139,13 @@ export class AppComponent {
   afficheLedefis(id:any){
     this.isDefisSelectionne = true;
     this.idVisite = "";
+
+    //Si on a pris un indice et que l'on selectionne un nouveau defis, remet les points à la valeur initiale
+    if(this.isIndice){
+      this.point = this.point + this.coutIndice;
+      this.isIndice = false;
+    }
+
     this.leDefis.id = id.id;
     this.leDefis.titre = id.titre;
     this.leDefis.dateDeCreation = id.dateDeCreation;
@@ -402,5 +409,11 @@ export class AppComponent {
         }
       );
     }
+  }
+
+  fermerVisite(){
+    this.isVisiteCommence = false;
+    this.isDefisSelectionne = false;
+    this.isAfficheListeDefis = false;
   }
 }

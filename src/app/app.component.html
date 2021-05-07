@@ -68,13 +68,17 @@
 
       <!-- Debut assistant -->
       <div class="formReponseDefis">
-        <div class="visiteAccueil">
+        <div>
           <h1>Pour commencer une visite cliquer sur le bouton si dessous</h1>
           <button mat-raised-button color="primary" (click)="CommencerVisite()">Commencer une visite</button>
         </div>
 
-        <div class="texteChoisirDefis" *ngIf="isVisiteCommence">
+        <div *ngIf="isVisiteCommence">
           <h2>Veuillez choisir un defis, pour cela cliquez sur un defis dans le tableau ou choisissez en un sur la carte</h2>
+        </div>
+
+        <div *ngIf="isDefisSelectionne">
+          <button mat-raised-button color="primary" (click)="fermerVisite()">Terminer ma visite</button>
         </div>
       </div>
       <!-- Fin assistant -->
